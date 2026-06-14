@@ -20,12 +20,14 @@
       <label for="post-title">Title</label>
       <input id="post-title" type="text" required>
 
-      <label for="post-image">Image URL</label>
-      <input id="post-image" type="url" placeholder="https://example.com/image.jpg">
-      <p class="hint">Use a direct image link ending in .jpg, .png, or .webp.</p>
+      <label for="post-image">Image</label>
+      <input id="post-image" type="file" accept="image/*">
+      <p class="hint">Upload a small image from your computer. Large images may not save in the browser.</p>
+      <img id="image-preview" class="image-preview" alt="" hidden>
 
       <label for="post-body">Post</label>
-      <textarea id="post-body" rows="10" required></textarea>
+      <div id="post-body" class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true"></div>
+      <p class="hint">Paste formatted text here, or use shortcuts like Ctrl+B and Ctrl+I.</p>
 
       <button type="submit">Save post</button>
     </form>

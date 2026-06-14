@@ -75,8 +75,57 @@ function escapeHTML(text) {
     .replaceAll("'", "&#039;");
 }
 
+function stripHTML(html) {
+  const container = document.createElement("div");
+  container.innerHTML = html;
+  return container.textContent || "";
+}
+
+function sanitizeHTML(html) {
+  const template = document.createElement("template");
+  template.innerHTML = html;
+  const allowedTags = ["A", "B", "BLOCKQUOTE", "BR", "DIV", "EM", "H2", "H3", "I", "LI", "OL", "P", "SPAN", "STRONG", "U", "UL"];
+  const allowedStyles = ["font-weight", "font-style", "text-decoration", "text-align"];
+
+  template.content.querySelectorAll("*").forEach((element) => {
+    if (!allowedTags.includes(element.tagName)) {
+      element.replaceWith(...element.childNodes);
+      return;
+    }
+
+    [...element.attributes].forEach((attribute) => {
+      const isSafeLink = element.tagName === "A" && attribute.name === "href" && attribute.value.startsWith("https://");
+      const isSafeStyle = attribute.name === "style";
+
+      if (isSafeStyle) {
+        const keptStyles = element
+          .getAttribute("style")
+          .split(";")
+          .map((style) => style.trim())
+          .filter((style) => allowedStyles.includes(style.split(":")[0].trim()))
+          .join("; ");
+
+        if (keptStyles) {
+          element.setAttribute("style", keptStyles);
+        } else {
+          element.removeAttribute("style");
+        }
+      } else if (!isSafeLink) {
+        element.removeAttribute(attribute.name);
+      }
+    });
+  });
+
+  return template.innerHTML;
+}
+
+function getPostBodyHTML(post) {
+  return post.bodyHTML || `<p>${escapeHTML(post.body || "")}</p>`;
+}
+
 function createPreview(post, index) {
-  const previewText = post.body.slice(0, 120);
+  const plainBody = stripHTML(getPostBodyHTML(post));
+  const previewText = plainBody.slice(0, 120);
   const imageSource = post.image || placeholderImage;
   const article = document.createElement("article");
   article.innerHTML = `
@@ -89,7 +138,7 @@ function createPreview(post, index) {
         <h2>${escapeHTML(post.title)}</h2>
       </div>
     </div>
-    <p>${escapeHTML(previewText)}${post.body.length > 120 ? "..." : ""}</p>
+    <p>${escapeHTML(previewText)}${plainBody.length > 120 ? "..." : ""}</p>
     <div class="post-actions">
       <div>
         <a class="edit-post" href="write.html?id=${index}">Edit</a>
@@ -129,11 +178,13 @@ function showSavedPosts() {
     .map((post, index) => ({ post, index }))
     .filter((item) => !isNewPost(item.post));
 
+  savedPostsSection.innerHTML = "<h2>New posts</h2>";
   if (newPosts.length > 0) {
-    savedPostsSection.innerHTML = "<h2>New posts</h2>";
     newPosts.forEach((item) => {
       savedPostsSection.appendChild(createPreview(item.post, item.index));
     });
+  } else {
+    savedPostsSection.innerHTML += '<p class="empty-posts">No browser posts yet. Click Write to add one.</p>';
   }
 
   if (olderSavedPostsSection && olderPosts.length > 0) {
@@ -164,19 +215,52 @@ function setupPostForm() {
   const postToEdit = hasPostId ? posts[postId] : null;
   const titleInput = document.querySelector("#post-title");
   const imageInput = document.querySelector("#post-image");
+  const imagePreview = document.querySelector("#image-preview");
   const bodyInput = document.querySelector("#post-body");
   const saveButton = form.querySelector("button");
+  let selectedImage = postToEdit ? postToEdit.image || "" : "";
+
+  function showImagePreview(imageSource) {
+    if (!imagePreview) {
+      return;
+    }
+
+    if (imageSource) {
+      imagePreview.src = imageSource;
+      imagePreview.hidden = false;
+    } else {
+      imagePreview.removeAttribute("src");
+      imagePreview.hidden = true;
+    }
+  }
 
   if (postToEdit) {
     titleInput.value = postToEdit.title;
-    imageInput.value = postToEdit.image || "";
-    bodyInput.value = postToEdit.body;
+    bodyInput.innerHTML = getPostBodyHTML(postToEdit);
+    showImagePreview(selectedImage);
     saveButton.textContent = "Update post";
   } else {
     titleInput.value = "";
-    imageInput.value = "";
-    bodyInput.value = "";
+    bodyInput.innerHTML = "";
+    showImagePreview("");
   }
+
+  imageInput.addEventListener("change", () => {
+    const file = imageInput.files[0];
+    if (!file) {
+      selectedImage = "";
+      showImagePreview("");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      selectedImage = reader.result;
+      showImagePreview(selectedImage);
+      hasUnsavedChanges = true;
+    });
+    reader.readAsDataURL(file);
+  });
 
   form.addEventListener("input", () => {
     hasUnsavedChanges = true;
@@ -193,11 +277,18 @@ function setupPostForm() {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     hasUnsavedChanges = false;
+    const cleanBody = sanitizeHTML(bodyInput.innerHTML);
+
+    if (stripHTML(cleanBody).trim() === "") {
+      hasUnsavedChanges = true;
+      bodyInput.focus();
+      return;
+    }
 
     const updatedPost = {
       title: titleInput.value,
-      image: imageInput.value,
-      body: bodyInput.value,
+      image: selectedImage,
+      bodyHTML: cleanBody,
       createdAt: new Date().toISOString()
     };
 
@@ -208,8 +299,13 @@ function setupPostForm() {
       posts.unshift(updatedPost);
     }
 
-    savePosts(posts);
-    window.location.href = "index.html";
+    try {
+      savePosts(posts);
+      window.location.href = "index.html";
+    } catch (error) {
+      hasUnsavedChanges = true;
+      alert("That post is too large to save in the browser. Try using a smaller image.");
+    }
   });
 }
 
@@ -229,12 +325,11 @@ function showFullSavedPost() {
   }
 
   document.querySelector("#saved-post-title").textContent = post.title;
-  const paragraphs = escapeHTML(post.body).replaceAll("\n", "</p><p>");
   const imageSource = post.image || placeholderImage;
   savedPost.innerHTML = `
     <time datetime="${post.createdAt}">${formatDate(post.createdAt)}</time>
     <img src="${escapeHTML(imageSource)}" alt="">
-    <p>${paragraphs}</p>
+    <div class="post-content">${sanitizeHTML(getPostBodyHTML(post))}</div>
   `;
 }
 
@@ -254,7 +349,7 @@ function setupSearch() {
   const searchInput = document.querySelector("#post-search");
   const clearSearch = document.querySelector("#clear-search");
   const noResults = document.querySelector("#no-search-results");
-  const sectionsToHide = document.querySelectorAll("#saved-posts, #older-saved-posts, #posts, #about, footer");
+  const sectionsToHide = document.querySelectorAll("#saved-posts, #older-saved-posts, #about, footer");
   if (!searchInput) {
     return;
   }

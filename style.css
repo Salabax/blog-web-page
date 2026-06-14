@@ -248,8 +248,7 @@ article {
   background: none;
 }
 
-#older-saved-posts,
-#posts {
+#older-saved-posts {
   margin-top: 48px;
   padding-top: 24px;
   border-top: 1px solid var(--line-color);
@@ -274,7 +273,8 @@ label {
 }
 
 input,
-textarea {
+textarea,
+.rich-editor {
   width: 100%;
   box-sizing: border-box;
   padding: 12px;
@@ -285,10 +285,41 @@ textarea {
   background-color: var(--field-background);
 }
 
+.rich-editor {
+  min-height: 240px;
+  outline: none;
+}
+
+.rich-editor:focus,
+input:focus,
+textarea:focus {
+  border-color: var(--heading-color);
+}
+
+.post-content p:first-child {
+  margin-top: 0;
+}
+
+.post-content blockquote {
+  margin-left: 0;
+  padding-left: 16px;
+  border-left: 3px solid var(--line-color);
+  color: var(--muted-color);
+}
+
+.image-preview {
+  max-height: 240px;
+  object-fit: cover;
+}
+
 .hint {
   margin-top: 8px;
   color: var(--muted-color);
   font-size: 14px;
+}
+
+.empty-posts {
+  color: var(--muted-color);
 }
 
 button {
