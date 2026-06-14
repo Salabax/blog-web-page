@@ -21,9 +21,9 @@ body.dark-mode {
 }
 
 body {
-  max-width: 720px;
+  max-width: 860px;
   margin: 40px auto;
-  padding: 0 20px;
+  padding: 0 28px;
   font-family: Arial, sans-serif;
   line-height: 1.6;
   color: var(--text-color);
@@ -32,8 +32,8 @@ body {
 
 header {
   position: relative;
-  padding-bottom: 32px;
-  margin-bottom: 40px;
+  padding-bottom: 44px;
+  margin-bottom: 52px;
   border-bottom: 1px solid var(--line-color);
 }
 
@@ -53,13 +53,15 @@ nav a:hover {
 }
 
 h1 {
-  font-size: 48px;
+  max-width: 680px;
+  font-size: 64px;
   line-height: 1.1;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
   color: var(--heading-color);
 }
 
 header p {
+  max-width: 680px;
   font-size: 20px;
 }
 
@@ -79,12 +81,16 @@ img {
 
 article {
   position: relative;
-  margin-bottom: 32px;
-  padding-top: 24px;
+  margin-bottom: 24px;
+  padding: 24px;
+  border: 1px solid var(--line-color);
+  border-radius: 8px;
+  background-color: color-mix(in srgb, var(--field-background) 64%, transparent);
 }
 
 .post-heading {
   position: relative;
+  padding-left: 76px;
   min-height: 48px;
   margin-bottom: 2px;
 }
@@ -97,7 +103,7 @@ article {
 .post-marker {
   position: absolute;
   top: 10px;
-  left: -88px;
+  left: 0;
   width: 64px;
   text-align: center;
 }
@@ -118,6 +124,7 @@ article {
 }
 
 .post-heading + p {
+  margin-left: 76px;
   margin-top: 0;
 }
 
@@ -136,6 +143,7 @@ article {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-left: 76px;
 }
 
 .post-actions .read-more {
@@ -172,6 +180,12 @@ article {
   margin-top: 48px;
   padding-top: 24px;
   border-top: 1px solid var(--line-color);
+}
+
+.intro {
+  margin-bottom: 32px;
+  color: var(--muted-color);
+  font-size: 18px;
 }
 
 #saved-posts {
@@ -360,8 +374,8 @@ button:hover {
 }
 
 footer {
-  margin-top: 48px;
-  padding-top: 24px;
+  margin-top: 64px;
+  padding-top: 28px;
   border-top: 1px solid var(--line-color);
   color: var(--muted-color);
   font-size: 14px;
@@ -379,7 +393,7 @@ footer a {
   font-weight: bold;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
   body {
     margin: 24px auto;
     padding: 0 18px 48px;
@@ -392,7 +406,7 @@ footer a {
   }
 
   h1 {
-    font-size: 34px;
+    font-size: 40px;
   }
 
   header p {
