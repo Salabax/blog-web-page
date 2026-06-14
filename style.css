@@ -1,14 +1,16 @@
 :root {
-  --page-background: #f7f4ef;
-  --text-color: #222222;
-  --heading-color: #1f3a5f;
-  --muted-color: #6b6258;
-  --line-color: #d8d0c5;
-  --field-background: #ffffff;
-  --button-background: #1f3a5f;
-  --button-hover: #2c4f7d;
+  --page-background: #171717;
+  --text-color: #f1eee8;
+  --heading-color: #d7e8ff;
+  --muted-color: #b8aea3;
+  --line-color: #4b4742;
+  --field-background: #242424;
+  --button-background: #3d6ea8;
+  --button-hover: #4f82bf;
+  --card-background: #1f1f1f;
 }
 
+body.dark,
 body.dark-mode {
   --page-background: #171717;
   --text-color: #f1eee8;
@@ -18,6 +20,55 @@ body.dark-mode {
   --field-background: #242424;
   --button-background: #3d6ea8;
   --button-hover: #4f82bf;
+  --card-background: #1f1f1f;
+}
+
+body.light {
+  --page-background: #f7f4ef;
+  --text-color: #222222;
+  --heading-color: #1f3a5f;
+  --muted-color: #6b6258;
+  --line-color: #d8d0c5;
+  --field-background: #ffffff;
+  --button-background: #1f3a5f;
+  --button-hover: #2c4f7d;
+  --card-background: #ffffff;
+}
+
+body.cyberpunk {
+  --page-background: #090018;
+  --text-color: #00ffe5;
+  --heading-color: #ff00cc;
+  --muted-color: #b799ff;
+  --line-color: #6d1aff;
+  --field-background: #16002b;
+  --button-background: #ff00cc;
+  --button-hover: #00ffe5;
+  --card-background: #16002b;
+}
+
+body.paper {
+  --page-background: #fbf7e8;
+  --text-color: #151515;
+  --heading-color: #111111;
+  --muted-color: #555555;
+  --line-color: #1f1f1f;
+  --field-background: #fffdf2;
+  --button-background: #111111;
+  --button-hover: #3a3a3a;
+  --card-background: #fffdf2;
+}
+
+body.terminal {
+  --page-background: #050805;
+  --text-color: #b8ffb8;
+  --heading-color: #69ff69;
+  --muted-color: #7ecf7e;
+  --line-color: #1f5f1f;
+  --field-background: #071107;
+  --button-background: #146b14;
+  --button-hover: #1f8f1f;
+  --card-background: #071107;
 }
 
 body {
@@ -28,6 +79,45 @@ body {
   line-height: 1.6;
   color: var(--text-color);
   background-color: var(--page-background);
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+body.paper {
+  background-image:
+    linear-gradient(#d8e8ff 1px, transparent 1px),
+    linear-gradient(90deg, transparent 72px, #f3b0b0 72px, #f3b0b0 74px, transparent 74px);
+  background-size: 100% 32px, 100% 100%;
+  font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
+}
+
+body.lab-mode {
+  background-image:
+    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--heading-color) 16%, transparent), transparent 28%),
+    radial-gradient(circle at 80% 10%, color-mix(in srgb, var(--button-background) 14%, transparent), transparent 24%);
+  background-attachment: fixed;
+  animation: lab-background 8s ease-in-out infinite alternate;
+}
+
+body.paper.lab-mode {
+  background-image:
+    linear-gradient(#d8e8ff 1px, transparent 1px),
+    linear-gradient(90deg, transparent 72px, #f3b0b0 72px, #f3b0b0 74px, transparent 74px),
+    radial-gradient(circle at 20% 20%, rgba(0, 0, 0, 0.08), transparent 28%);
+  background-size: 100% 32px, 100% 100%, 100% 100%;
+}
+
+body.paper h1,
+body.paper h2 {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+body.paper h1 {
+  text-shadow: 2px 2px 0 #ffffff;
+}
+
+body.lab-mode h1 {
+  animation: lab-title 2.8s steps(2, end) infinite;
 }
 
 header {
@@ -81,11 +171,113 @@ img {
 
 article {
   position: relative;
+  overflow: hidden;
   margin-bottom: 24px;
   padding: 24px;
   border: 1px solid var(--line-color);
   border-radius: 8px;
-  background-color: color-mix(in srgb, var(--field-background) 64%, transparent);
+  background-color: var(--card-background);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+body.paper article {
+  border: 2px solid var(--line-color);
+  border-radius: 4px 10px 5px 12px;
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.18);
+}
+
+.post-card {
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.post-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(var(--card-background), var(--card-background)) padding-box,
+    conic-gradient(
+      from var(--glow-angle),
+      transparent 0deg,
+      color-mix(in srgb, var(--heading-color) 85%, transparent) 70deg,
+      transparent 140deg,
+      transparent 360deg
+    ) border-box;
+  border: 2px solid transparent;
+  opacity: 0;
+  padding: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.post-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.post-card:hover::before,
+.post-card.spotlight::before {
+  opacity: 1;
+  animation: card-edge-light 1.4s linear infinite;
+}
+
+body.lab-mode .post-card::before {
+  opacity: 0.75;
+  animation: card-edge-light 2.4s linear infinite;
+}
+
+.post-card:hover {
+  border-color: var(--heading-color);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
+  transform: translateY(-4px);
+}
+
+.post-card.spotlight {
+  border-color: var(--heading-color);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--heading-color) 28%, transparent);
+  transform: translateY(-4px);
+}
+
+@property --glow-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes card-edge-light {
+  to {
+    --glow-angle: 360deg;
+  }
+}
+
+@keyframes lab-background {
+  from {
+    background-position: 0 0, 0 0;
+  }
+
+  to {
+    background-position: 24px 18px, -18px 28px;
+  }
+}
+
+@keyframes lab-title {
+  0%,
+  92%,
+  100% {
+    text-shadow: none;
+    transform: translateX(0);
+  }
+
+  94% {
+    text-shadow: 3px 0 0 var(--button-background), -3px 0 0 var(--heading-color);
+    transform: translateX(1px);
+  }
+
+  96% {
+    text-shadow: -2px 0 0 var(--button-background), 2px 0 0 var(--heading-color);
+    transform: translateX(-1px);
+  }
 }
 
 .post-heading {
@@ -128,15 +320,63 @@ article {
   margin-top: 0;
 }
 
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 10px 0 10px 76px;
+  color: var(--muted-color);
+  font-size: 13px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border: 1px solid var(--line-color);
+  border-radius: 999px;
+  color: var(--heading-color);
+  background-color: var(--field-background);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+body.paper .tag,
+body.paper .theme-option,
+body.paper .post-actions .read-more,
+body.paper input,
+body.paper .rich-editor {
+  border: 2px solid var(--line-color);
+  border-radius: 4px 9px 5px 8px;
+}
+
+body.paper .post-preview-image {
+  border: 2px solid var(--line-color);
+  filter: grayscale(1) contrast(1.15);
+}
+
+body.paper .mood::before {
+  content: "note: ";
+  font-weight: bold;
+}
+
+.mood {
+  margin-left: 76px;
+  color: var(--muted-color);
+  font-size: 14px;
+  font-style: italic;
+}
+
 .read-more {
   display: block;
   text-align: right;
   color: var(--muted-color);
   font-weight: bold;
+  text-decoration: none;
 }
 
 .read-more:hover {
-  text-decoration: none;
+  color: var(--heading-color);
 }
 
 .post-actions {
@@ -148,7 +388,15 @@ article {
 
 .post-actions .read-more {
   display: inline;
+  padding: 5px 10px;
+  border: 1px solid var(--line-color);
+  border-radius: 999px;
   text-align: left;
+}
+
+.post-actions .read-more:hover {
+  border-color: var(--heading-color);
+  background-color: var(--field-background);
 }
 
 .delete-post {
@@ -182,6 +430,16 @@ article {
   border-top: 1px solid var(--line-color);
 }
 
+#experiments {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line-color);
+}
+
+#experiments button {
+  margin-right: 8px;
+}
+
 .intro {
   margin-bottom: 32px;
   color: var(--muted-color);
@@ -199,6 +457,40 @@ article {
   bottom: 32px;
   width: 220px;
   margin-bottom: 0;
+}
+
+.theme-panel {
+  max-width: 680px;
+  margin-top: 28px;
+}
+
+.theme-panel p {
+  margin: 0 0 10px;
+  color: var(--muted-color);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.theme-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.theme-option {
+  margin-top: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--line-color);
+  border-radius: 999px;
+  color: var(--muted-color);
+  background-color: var(--field-background);
+  font-size: 14px;
+}
+
+.theme-option:hover,
+.theme-option.active {
+  color: var(--page-background);
+  background-color: var(--heading-color);
 }
 
 .search-section label {
@@ -454,7 +746,9 @@ footer a {
   }
 
   .post-heading + p,
-  .post-actions {
+  .post-actions,
+  .post-meta,
+  .mood {
     margin-left: 68px;
   }
 
