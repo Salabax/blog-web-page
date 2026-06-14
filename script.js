@@ -1,11 +1,19 @@
 ﻿const postsKey = "my-first-blog-posts";
 const themeKey = "my-first-blog-theme";
 const labModeKey = "my-first-blog-lab-mode";
+const savedArticlesKey = "my-first-blog-saved-articles";
 const placeholderImage = "images/first-post-placeholder.svg";
 const themes = [
   { name: "dark", label: "Dark" },
   { name: "cyberpunk", label: "Cyberpunk" },
   { name: "paper", label: "Paper notebook" }
+];
+const siteMoods = [
+  "confused but building",
+  "small win unlocked",
+  "breaking things politely",
+  "GitHub Pages survivor",
+  "backend avoided successfully"
 ];
 const starterPosts = [
   {
@@ -41,6 +49,19 @@ function getPosts() {
 
 function savePosts(posts) {
   localStorage.setItem(postsKey, JSON.stringify(posts));
+}
+
+function getSavedArticleIds() {
+  const savedArticles = localStorage.getItem(savedArticlesKey);
+  return savedArticles ? JSON.parse(savedArticles) : [];
+}
+
+function saveArticleIds(articleIds) {
+  localStorage.setItem(savedArticlesKey, JSON.stringify(articleIds));
+}
+
+function getPostId(post) {
+  return post.isStarter ? `starter-${post.starterIndex}` : `local-${post.localIndex}`;
 }
 
 function getDisplayPosts() {
@@ -164,6 +185,12 @@ function createPreview(post, index) {
   const tags = getPostTags(post, index);
   article.className = "post-card";
   const postLink = post.isStarter ? `post.html?starter=${post.starterIndex}` : `post.html?id=${post.localIndex}`;
+  const postId = getPostId(post);
+  const isSaved = getSavedArticleIds().includes(postId);
+  article.dataset.postId = postId;
+  article.dataset.href = postLink;
+  article.tabIndex = 0;
+  article.setAttribute("role", "link");
   const editControls = post.isStarter
     ? ""
     : `
@@ -173,6 +200,9 @@ function createPreview(post, index) {
       </div>
     `;
   article.innerHTML = `
+    <button class="save-post" type="button" data-post-id="${postId}" aria-pressed="${isSaved}">
+      ${isSaved ? "★" : "☆"}
+    </button>
     <div class="post-heading">
       <div class="post-marker">
         <time datetime="${post.createdAt}">${formatDate(post.createdAt)}</time>
@@ -193,6 +223,18 @@ function createPreview(post, index) {
       <a class="read-more" href="${postLink}">Read more...</a>
     </div>
   `;
+  article.addEventListener("click", (event) => {
+    if (event.target.closest("a, button")) {
+      return;
+    }
+
+    window.location.href = postLink;
+  });
+  article.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      window.location.href = postLink;
+    }
+  });
   return article;
 }
 
@@ -211,6 +253,21 @@ function deletePost(index) {
   posts.splice(index, 1);
   savePosts(posts);
   window.location.reload();
+}
+
+function toggleSavedArticle(postId) {
+  const savedArticleIds = getSavedArticleIds();
+  const isSaved = savedArticleIds.includes(postId);
+  const nextSavedArticleIds = isSaved
+    ? savedArticleIds.filter((savedId) => savedId !== postId)
+    : [...savedArticleIds, postId];
+
+  saveArticleIds(nextSavedArticleIds);
+
+  document.querySelectorAll(`.save-post[data-post-id="${postId}"]`).forEach((button) => {
+    button.textContent = isSaved ? "☆" : "★";
+    button.setAttribute("aria-pressed", String(!isSaved));
+  });
 }
 
 function showSavedPosts() {
@@ -245,6 +302,12 @@ function showSavedPosts() {
   document.querySelectorAll(".delete-post").forEach((button) => {
     button.addEventListener("click", () => {
       deletePost(Number(button.dataset.index));
+    });
+  });
+
+  document.querySelectorAll(".save-post").forEach((button) => {
+    button.addEventListener("click", () => {
+      toggleSavedArticle(button.dataset.postId);
     });
   });
 }
@@ -376,6 +439,7 @@ function showFullSavedPost() {
   document.querySelector("#saved-post-title").textContent = post.title;
   const imageSource = post.image || placeholderImage;
   savedPost.innerHTML = `
+    <h2 class="zen-title">${escapeHTML(post.title)}</h2>
     <time datetime="${post.createdAt}">${formatDate(post.createdAt)}</time>
     <img src="${escapeHTML(imageSource)}" alt="">
     <div class="post-content">${sanitizeHTML(getPostBodyHTML(post))}</div>
@@ -489,9 +553,110 @@ function setupLabMode() {
   });
 }
 
+function setupControlPanel() {
+  const chaosButton = document.querySelector("#chaos-button");
+  const resetButton = document.querySelector("#reset-controls");
+  const savedFilterButton = document.querySelector("#saved-filter");
+  const siteMood = document.querySelector("#site-mood");
+  const themeControl = document.querySelector("#theme-control");
+  const themePanel = document.querySelector(".theme-panel");
+  let showingSavedOnly = false;
+
+  function setRandomMood() {
+    if (!siteMood) {
+      return;
+    }
+
+    const randomMood = siteMoods[Math.floor(Math.random() * siteMoods.length)];
+    siteMood.textContent = `Mood: ${randomMood}`;
+  }
+
+  if (themeControl && themePanel) {
+    themePanel.hidden = true;
+    themeControl.addEventListener("click", () => {
+      themePanel.hidden = !themePanel.hidden;
+    });
+  }
+
+  if (chaosButton) {
+    chaosButton.addEventListener("click", setRandomMood);
+  }
+
+  if (savedFilterButton) {
+    savedFilterButton.addEventListener("click", () => {
+      showingSavedOnly = !showingSavedOnly;
+      const savedArticleIds = getSavedArticleIds();
+
+      document.querySelectorAll(".post-card").forEach((card) => {
+        card.hidden = showingSavedOnly && !savedArticleIds.includes(card.dataset.postId);
+      });
+
+      savedFilterButton.setAttribute("aria-pressed", String(showingSavedOnly));
+      savedFilterButton.textContent = showingSavedOnly ? "All Articles" : "Saved Articles";
+      updatePostCount();
+    });
+  }
+
+  if (resetButton) {
+    resetButton.addEventListener("click", () => {
+      document.body.classList.remove("lab-mode");
+      localStorage.setItem(labModeKey, "off");
+
+      const labModeButton = document.querySelector("#lab-mode");
+      if (labModeButton) {
+        labModeButton.textContent = "Lab Mode: OFF";
+        labModeButton.setAttribute("aria-pressed", "false");
+      }
+
+      if (themePanel) {
+        themePanel.hidden = true;
+      }
+
+      if (siteMood) {
+        siteMood.textContent = "Mood: confused but building";
+      }
+
+      showingSavedOnly = false;
+      document.querySelectorAll(".post-card").forEach((card) => {
+        card.hidden = false;
+      });
+
+      if (savedFilterButton) {
+        savedFilterButton.textContent = "Saved Articles";
+        savedFilterButton.setAttribute("aria-pressed", "false");
+      }
+
+      updatePostCount();
+    });
+  }
+}
+
+function setupZenMode() {
+  const postArticle = document.querySelector("#saved-post") || document.querySelector("main article");
+  if (!postArticle) {
+    return;
+  }
+
+  document.addEventListener("keydown", (event) => {
+    const activeElement = document.activeElement;
+    const isWriting = activeElement && (
+      activeElement.tagName === "INPUT" ||
+      activeElement.tagName === "TEXTAREA" ||
+      activeElement.isContentEditable
+    );
+
+    if (isWriting || event.key.toLowerCase() !== "z") {
+      return;
+    }
+
+    document.body.classList.toggle("zen-mode");
+  });
+}
+
 function setupTheme() {
   const savedTheme = localStorage.getItem(themeKey) || "dark";
   const header = document.querySelector("header");
+  const controlPanel = document.querySelector("#control-panel");
 
   function applyTheme(themeName) {
     themes.forEach((theme) => {
@@ -512,7 +677,7 @@ function setupTheme() {
   const safeTheme = themes.some((theme) => theme.name === savedTheme) ? savedTheme : "dark";
   applyTheme(safeTheme);
 
-  if (!header) {
+  if (!header && !controlPanel) {
     return;
   }
 
@@ -528,7 +693,7 @@ function setupTheme() {
     </div>
   `;
 
-  header.appendChild(themePanel);
+  (controlPanel || header).appendChild(themePanel);
 
   themePanel.querySelectorAll(".theme-option").forEach((button) => {
     button.addEventListener("click", () => {
@@ -546,5 +711,7 @@ showFullSavedPost();
 setupSearch();
 setupRandomPost();
 setupLabMode();
+setupControlPanel();
+setupZenMode();
 updatePostCount();
 
