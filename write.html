@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Write a Post - My First Blog</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Write a Post</h1>
+    <p>Add a new post from the browser.</p>
+    <nav>
+      <a href="index.html">Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <form id="post-form" autocomplete="off">
+      <label for="post-title">Title</label>
+      <input id="post-title" type="text" required>
+
+      <label for="post-image">Image URL</label>
+      <input id="post-image" type="url" placeholder="https://example.com/image.jpg">
+      <p class="hint">Use a direct image link ending in .jpg, .png, or .webp.</p>
+
+      <label for="post-body">Post</label>
+      <textarea id="post-body" rows="10" required></textarea>
+
+      <button type="submit">Save post</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>Made by me while learning web development.</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

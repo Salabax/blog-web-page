@@ -1,0 +1,9 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="700" fill="#E7DFD4"/>
+  <rect x="80" y="80" width="1040" height="540" rx="24" fill="#F7F4EF" stroke="#D8D0C5" stroke-width="4"/>
+  <path d="M240 480C240 360 340 260 460 260H740C860 260 960 360 960 480" stroke="#1F3A5F" stroke-width="42" stroke-linecap="round"/>
+  <circle cx="460" cy="260" r="58" fill="#6B6258"/>
+  <circle cx="740" cy="260" r="58" fill="#6B6258"/>
+  <text x="600" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" font-weight="700" fill="#1F3A5F">Second Post Image</text>
+  <text x="600" y="555" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#6B6258">Temporary image for now</text>
+</svg>
