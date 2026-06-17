@@ -4,6 +4,11 @@ const savedArticlesKey = "my-first-blog-saved-articles";
 const thoughtsKey = "wandering-collective-thoughts";
 const thoughtsClearKey = "wandering-collective-thoughts-last-clear";
 const drawerLinksKey = "wandering-internet-drawer-links";
+const blindListeningHistoryKey = "wandering-blind-listening-history";
+const blindDiscoveredAlbumsKey = "wandering-blind-discovered-albums";
+const blindFavoriteAlbumsKey = "wandering-blind-favorite-albums";
+const coffeeBreakPrefsKey = "wandering-coffee-break-preferences";
+const controlTowerCollapsedKey = "wandering-control-tower-collapsed";
 const placeholderImage = "images/first-post-placeholder.svg";
 const themes = [
   { name: "cyberpunk", label: "Cyberpunk" },
@@ -25,6 +30,248 @@ const chillQuotes = [
   "Open a tab and let the internet breathe."
 ];
 const radioGardenUrl = "https://radio.garden/";
+const blindAlbums = [
+  {
+    id: "demo-001",
+    title: "Rooms Above the Rain",
+    artist: "Mira Vale",
+    year: "2018",
+    genre: "Ambient",
+    coverImage: createDemoAlbumCover("RA", "#140022", "#00ffe5", "#ff00cc"),
+    description: "Slow room-tone synths, distant weather, and the feeling of lights left on in another apartment.",
+    bandcampUrl: "https://bandcamp.com/search?q=Rooms%20Above%20the%20Rain%20Mira%20Vale",
+    spotifyUrl: "https://open.spotify.com/search/Rooms%20Above%20the%20Rain%20Mira%20Vale",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Rooms+Above+the+Rain+Mira+Vale"
+  },
+  {
+    id: "demo-002",
+    title: "Soft Static Maps",
+    artist: "North Arcade",
+    year: "2020",
+    genre: "Electronic",
+    coverImage: createDemoAlbumCover("SM", "#091018", "#f0c84b", "#3d4248"),
+    description: "Minimal electronic sketches that feel like finding an old transit map inside a jacket pocket.",
+    bandcampUrl: "https://bandcamp.com/search?q=Soft%20Static%20Maps%20North%20Arcade",
+    spotifyUrl: "https://open.spotify.com/search/Soft%20Static%20Maps%20North%20Arcade",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Soft+Static+Maps+North+Arcade"
+  },
+  {
+    id: "demo-003",
+    title: "Moonlit Errands",
+    artist: "Paper Lantern Service",
+    year: "2016",
+    genre: "Indie",
+    coverImage: createDemoAlbumCover("ME", "#1b1330", "#ffe083", "#b799ff"),
+    description: "Small guitar songs for walking to a corner shop when the city has gone quiet.",
+    bandcampUrl: "https://bandcamp.com/search?q=Moonlit%20Errands%20Paper%20Lantern%20Service",
+    spotifyUrl: "https://open.spotify.com/search/Moonlit%20Errands%20Paper%20Lantern%20Service",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Moonlit+Errands+Paper+Lantern+Service"
+  },
+  {
+    id: "demo-004",
+    title: "Basement Aquarium",
+    artist: "Low Tide Mechanic",
+    year: "2019",
+    genre: "Downtempo",
+    coverImage: createDemoAlbumCover("BA", "#04212b", "#5ee6ff", "#156b7a"),
+    description: "A dim downtempo record with watery keys, dusty drums, and a slow pulse.",
+    bandcampUrl: "https://bandcamp.com/search?q=Basement%20Aquarium%20Low%20Tide%20Mechanic",
+    spotifyUrl: "https://open.spotify.com/search/Basement%20Aquarium%20Low%20Tide%20Mechanic",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Basement+Aquarium+Low+Tide+Mechanic"
+  },
+  {
+    id: "demo-005",
+    title: "Late Bus Reverb",
+    artist: "Terminal Bloom",
+    year: "2021",
+    genre: "Shoegaze",
+    coverImage: createDemoAlbumCover("LB", "#201022", "#ff77cc", "#5b7cff"),
+    description: "Blurred guitars and tired melodies, like neon signs reflected in wet windows.",
+    bandcampUrl: "https://bandcamp.com/search?q=Late%20Bus%20Reverb%20Terminal%20Bloom",
+    spotifyUrl: "https://open.spotify.com/search/Late%20Bus%20Reverb%20Terminal%20Bloom",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Late+Bus+Reverb+Terminal+Bloom"
+  },
+  {
+    id: "demo-006",
+    title: "Green Screen Daydream",
+    artist: "Pocket Meadow",
+    year: "2015",
+    genre: "Chiptune",
+    coverImage: createDemoAlbumCover("GS", "#cadc9f", "#0f381f", "#577c44"),
+    description: "Tiny melodies with handheld-game warmth, playful but a little lonely.",
+    bandcampUrl: "https://bandcamp.com/search?q=Green%20Screen%20Daydream%20Pocket%20Meadow",
+    spotifyUrl: "https://open.spotify.com/search/Green%20Screen%20Daydream%20Pocket%20Meadow",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Green+Screen+Daydream+Pocket+Meadow"
+  },
+  {
+    id: "demo-007",
+    title: "Elevator for Ghosts",
+    artist: "Marble Lobby",
+    year: "2017",
+    genre: "Vaporwave",
+    coverImage: createDemoAlbumCover("EG", "#2d1033", "#f7a8ff", "#7bf0ff"),
+    description: "Synthetic lounge fragments and glossy sadness from a mall that closed years ago.",
+    bandcampUrl: "https://bandcamp.com/search?q=Elevator%20for%20Ghosts%20Marble%20Lobby",
+    spotifyUrl: "https://open.spotify.com/search/Elevator%20for%20Ghosts%20Marble%20Lobby",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Elevator+for+Ghosts+Marble+Lobby"
+  },
+  {
+    id: "demo-008",
+    title: "Unmarked Side B",
+    artist: "Cassette Weather",
+    year: "2014",
+    genre: "Lo-fi",
+    coverImage: createDemoAlbumCover("B", "#151515", "#d7e8ff", "#4b4742"),
+    description: "Tape hiss, simple loops, and the gentle mystery of something recorded over something else.",
+    bandcampUrl: "https://bandcamp.com/search?q=Unmarked%20Side%20B%20Cassette%20Weather",
+    spotifyUrl: "https://open.spotify.com/search/Unmarked%20Side%20B%20Cassette%20Weather",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Unmarked+Side+B+Cassette+Weather"
+  },
+  {
+    id: "demo-009",
+    title: "Stairwell Stars",
+    artist: "Blue Exit Sign",
+    year: "2022",
+    genre: "Post-rock",
+    coverImage: createDemoAlbumCover("SS", "#07142a", "#9cc8ff", "#ffcc66"),
+    description: "Slow-building instrumentals that look upward from ordinary concrete places.",
+    bandcampUrl: "https://bandcamp.com/search?q=Stairwell%20Stars%20Blue%20Exit%20Sign",
+    spotifyUrl: "https://open.spotify.com/search/Stairwell%20Stars%20Blue%20Exit%20Sign",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Stairwell+Stars+Blue+Exit+Sign"
+  },
+  {
+    id: "demo-010",
+    title: "Rain on Plastic Chairs",
+    artist: "Market After Midnight",
+    year: "2023",
+    genre: "Field Recording",
+    coverImage: createDemoAlbumCover("RP", "#0f1518", "#b8aea3", "#00ffe5"),
+    description: "Found sounds, quiet percussion, and the tiny rhythm of weather on cheap furniture.",
+    bandcampUrl: "https://bandcamp.com/search?q=Rain%20on%20Plastic%20Chairs%20Market%20After%20Midnight",
+    spotifyUrl: "https://open.spotify.com/search/Rain%20on%20Plastic%20Chairs%20Market%20After%20Midnight",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Rain+on+Plastic+Chairs+Market+After+Midnight"
+  },
+  {
+    id: "demo-011",
+    title: "Antenna Sleep",
+    artist: "Quiet Receiver",
+    year: "2012",
+    genre: "Drone",
+    coverImage: createDemoAlbumCover("AS", "#050805", "#69ff69", "#1f5f1f"),
+    description: "Long tones that barely move, like radio signals resting behind the wall.",
+    bandcampUrl: "https://bandcamp.com/search?q=Antenna%20Sleep%20Quiet%20Receiver",
+    spotifyUrl: "https://open.spotify.com/search/Antenna%20Sleep%20Quiet%20Receiver",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Antenna+Sleep+Quiet+Receiver"
+  },
+  {
+    id: "demo-012",
+    title: "Hotel Ice Machine",
+    artist: "Vacancy Light",
+    year: "2020",
+    genre: "Ambient Pop",
+    coverImage: createDemoAlbumCover("HI", "#1c1f2a", "#e8eefc", "#6d1aff"),
+    description: "Soft vocals and humming machines from a hallway that never quite ends.",
+    bandcampUrl: "https://bandcamp.com/search?q=Hotel%20Ice%20Machine%20Vacancy%20Light",
+    spotifyUrl: "https://open.spotify.com/search/Hotel%20Ice%20Machine%20Vacancy%20Light",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Hotel+Ice+Machine+Vacancy+Light"
+  },
+  {
+    id: "demo-013",
+    title: "Cloud Storage for Feelings",
+    artist: "Null Folder",
+    year: "2019",
+    genre: "Experimental",
+    coverImage: createDemoAlbumCover("CF", "#090018", "#ff00cc", "#00ffe5"),
+    description: "Fragmented electronic pieces about memory, files, and things you meant to back up.",
+    bandcampUrl: "https://bandcamp.com/search?q=Cloud%20Storage%20for%20Feelings%20Null%20Folder",
+    spotifyUrl: "https://open.spotify.com/search/Cloud%20Storage%20for%20Feelings%20Null%20Folder",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Cloud+Storage+for+Feelings+Null+Folder"
+  },
+  {
+    id: "demo-014",
+    title: "Kitchen Light Jazz",
+    artist: "Small Hours Trio",
+    year: "2011",
+    genre: "Jazz",
+    coverImage: createDemoAlbumCover("KJ", "#16120c", "#f0c84b", "#9b9690"),
+    description: "Warm, sparse trio sketches that sound like dishes drying after midnight.",
+    bandcampUrl: "https://bandcamp.com/search?q=Kitchen%20Light%20Jazz%20Small%20Hours%20Trio",
+    spotifyUrl: "https://open.spotify.com/search/Kitchen%20Light%20Jazz%20Small%20Hours%20Trio",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Kitchen+Light+Jazz+Small+Hours+Trio"
+  },
+  {
+    id: "demo-015",
+    title: "Copy Shop Romance",
+    artist: "Toner Hearts",
+    year: "2018",
+    genre: "Synthpop",
+    coverImage: createDemoAlbumCover("CR", "#2b0030", "#ff7bd5", "#ffffff"),
+    description: "Bright synth songs with office-machine nostalgia and shy melodies.",
+    bandcampUrl: "https://bandcamp.com/search?q=Copy%20Shop%20Romance%20Toner%20Hearts",
+    spotifyUrl: "https://open.spotify.com/search/Copy%20Shop%20Romance%20Toner%20Hearts",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Copy+Shop+Romance+Toner+Hearts"
+  },
+  {
+    id: "demo-016",
+    title: "Bus Window Cinema",
+    artist: "Route 43",
+    year: "2021",
+    genre: "Trip-hop",
+    coverImage: createDemoAlbumCover("43", "#102033", "#5ee6ff", "#f0c84b"),
+    description: "Smoky beats and passing lights, made for watching the city through glass.",
+    bandcampUrl: "https://bandcamp.com/search?q=Bus%20Window%20Cinema%20Route%2043",
+    spotifyUrl: "https://open.spotify.com/search/Bus%20Window%20Cinema%20Route%2043",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Bus+Window+Cinema+Route+43"
+  },
+  {
+    id: "demo-017",
+    title: "Postcard From Nowhere",
+    artist: "The Unsent",
+    year: "2013",
+    genre: "Folk",
+    coverImage: createDemoAlbumCover("PN", "#f2d7a5", "#3a2a1b", "#b28a1d"),
+    description: "Quiet acoustic songs with the feeling of messages written and never mailed.",
+    bandcampUrl: "https://bandcamp.com/search?q=Postcard%20From%20Nowhere%20The%20Unsent",
+    spotifyUrl: "https://open.spotify.com/search/Postcard%20From%20Nowhere%20The%20Unsent",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Postcard+From+Nowhere+The+Unsent"
+  },
+  {
+    id: "demo-018",
+    title: "Arcade Carpet",
+    artist: "Token Machine",
+    year: "2017",
+    genre: "Electro",
+    coverImage: createDemoAlbumCover("AC", "#111111", "#ff00cc", "#00ffe5"),
+    description: "Bouncy machine funk with glowing-floor nostalgia and a pocket full of coins.",
+    bandcampUrl: "https://bandcamp.com/search?q=Arcade%20Carpet%20Token%20Machine",
+    spotifyUrl: "https://open.spotify.com/search/Arcade%20Carpet%20Token%20Machine",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Arcade+Carpet+Token+Machine"
+  },
+  {
+    id: "demo-019",
+    title: "Dust on the Receiver",
+    artist: "Houseplant Radio",
+    year: "2016",
+    genre: "Psychedelic",
+    coverImage: createDemoAlbumCover("DR", "#26321f", "#cadc9f", "#ffcc66"),
+    description: "Wobbly guitars, soft organs, and a room that smells like warm electronics.",
+    bandcampUrl: "https://bandcamp.com/search?q=Dust%20on%20the%20Receiver%20Houseplant%20Radio",
+    spotifyUrl: "https://open.spotify.com/search/Dust%20on%20the%20Receiver%20Houseplant%20Radio",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Dust+on+the+Receiver+Houseplant+Radio"
+  },
+  {
+    id: "demo-020",
+    title: "Underpass Choir",
+    artist: "Concrete Echo",
+    year: "2024",
+    genre: "Experimental Rock",
+    coverImage: createDemoAlbumCover("UC", "#101214", "#d8d2c7", "#f0c84b"),
+    description: "Echoing vocals, heavy room sound, and drums that feel recorded below street level.",
+    bandcampUrl: "https://bandcamp.com/search?q=Underpass%20Choir%20Concrete%20Echo",
+    spotifyUrl: "https://open.spotify.com/search/Underpass%20Choir%20Concrete%20Echo",
+    youtubeSearchUrl: "https://www.youtube.com/results?search_query=Underpass+Choir+Concrete+Echo"
+  }
+];
 const dailyObjects = [
   {
     name: "Cassette tape",
@@ -313,40 +560,69 @@ const starterThoughts = [
   }
 ];
 
+function readLocalJSON(key, fallbackValue) {
+  try {
+    const savedValue = localStorage.getItem(key);
+    return savedValue ? JSON.parse(savedValue) : fallbackValue;
+  } catch (error) {
+    return fallbackValue;
+  }
+}
+
+function writeLocalJSON(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+function createDemoAlbumCover(label, backgroundColor, primaryColor, secondaryColor) {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+      <rect width="600" height="600" fill="${backgroundColor}"/>
+      <circle cx="455" cy="120" r="150" fill="${secondaryColor}" opacity="0.35"/>
+      <circle cx="145" cy="470" r="190" fill="${primaryColor}" opacity="0.22"/>
+      <path d="M70 390 C170 300 250 450 340 335 S505 260 555 330" fill="none" stroke="${primaryColor}" stroke-width="20" opacity="0.72"/>
+      <rect x="72" y="72" width="456" height="456" fill="none" stroke="${primaryColor}" stroke-width="8" opacity="0.75"/>
+      <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" fill="${primaryColor}" font-family="Arial, sans-serif" font-size="116" font-weight="700">${label}</text>
+    </svg>
+  `;
+
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+
 function getPosts() {
-  const savedPosts = localStorage.getItem(postsKey);
-  return savedPosts ? JSON.parse(savedPosts) : [];
+  return readLocalJSON(postsKey, []);
 }
 
 function savePosts(posts) {
-  localStorage.setItem(postsKey, JSON.stringify(posts));
+  return writeLocalJSON(postsKey, posts);
 }
 
 function getSavedArticleIds() {
-  const savedArticles = localStorage.getItem(savedArticlesKey);
-  return savedArticles ? JSON.parse(savedArticles) : [];
+  return readLocalJSON(savedArticlesKey, []);
 }
 
 function saveArticleIds(articleIds) {
-  localStorage.setItem(savedArticlesKey, JSON.stringify(articleIds));
+  return writeLocalJSON(savedArticlesKey, articleIds);
 }
 
 function getThoughts() {
-  const savedThoughts = localStorage.getItem(thoughtsKey);
-  return savedThoughts ? JSON.parse(savedThoughts) : [];
+  return readLocalJSON(thoughtsKey, []);
 }
 
 function saveThoughts(thoughts) {
-  localStorage.setItem(thoughtsKey, JSON.stringify(thoughts));
+  return writeLocalJSON(thoughtsKey, thoughts);
 }
 
 function getDrawerLinks() {
-  const savedLinks = localStorage.getItem(drawerLinksKey);
-  return savedLinks ? JSON.parse(savedLinks) : [];
+  return readLocalJSON(drawerLinksKey, []);
 }
 
 function saveDrawerLinks(links) {
-  localStorage.setItem(drawerLinksKey, JSON.stringify(links));
+  return writeLocalJSON(drawerLinksKey, links);
 }
 
 function getDailyObject() {
@@ -880,6 +1156,119 @@ function setupInternetDrawerForm() {
   });
 }
 
+function getBlindListeningHistory() {
+  return readLocalJSON(blindListeningHistoryKey, []);
+}
+
+function saveBlindListeningHistory(history) {
+  return writeLocalJSON(blindListeningHistoryKey, history);
+}
+
+function getBlindDiscoveredAlbums() {
+  return readLocalJSON(blindDiscoveredAlbumsKey, []);
+}
+
+function saveBlindDiscoveredAlbums(albumIds) {
+  return writeLocalJSON(blindDiscoveredAlbumsKey, albumIds);
+}
+
+function getBlindFavoriteAlbums() {
+  return readLocalJSON(blindFavoriteAlbumsKey, []);
+}
+
+function saveBlindFavoriteAlbums(albumIds) {
+  return writeLocalJSON(blindFavoriteAlbumsKey, albumIds);
+}
+
+function getRandomBlindAlbum(currentAlbumId) {
+  const availableAlbums = blindAlbums.filter((album) => album.id !== currentAlbumId);
+  return availableAlbums[Math.floor(Math.random() * availableAlbums.length)] || blindAlbums[0];
+}
+
+function recordBlindReveal(album) {
+  const history = getBlindListeningHistory();
+  history.unshift({
+    albumId: album.id,
+    action: "reveal",
+    createdAt: new Date().toISOString()
+  });
+  saveBlindListeningHistory(history.slice(0, 100));
+
+  const discoveredAlbums = getBlindDiscoveredAlbums();
+  if (!discoveredAlbums.includes(album.id)) {
+    saveBlindDiscoveredAlbums([...discoveredAlbums, album.id]);
+  }
+}
+
+function toggleBlindFavorite(album) {
+  const favoriteAlbums = getBlindFavoriteAlbums();
+  const isFavorite = favoriteAlbums.includes(album.id);
+  const nextFavorites = isFavorite
+    ? favoriteAlbums.filter((albumId) => albumId !== album.id)
+    : [...favoriteAlbums, album.id];
+
+  saveBlindFavoriteAlbums(nextFavorites);
+  return !isFavorite;
+}
+
+function setupBlindListening() {
+  const card = document.querySelector("#blind-listening-card");
+  if (!card) {
+    return;
+  }
+
+  let currentAlbum = getRandomBlindAlbum();
+  let isRevealed = false;
+
+  function renderAlbum() {
+    const favoriteAlbums = getBlindFavoriteAlbums();
+    const isFavorite = favoriteAlbums.includes(currentAlbum.id);
+    card.classList.toggle("is-revealed", isRevealed);
+    card.innerHTML = `
+      <div class="blind-cover-wrap">
+        <img class="blind-cover" src="${currentAlbum.coverImage}" alt="Album cover">
+      </div>
+      <div class="blind-actions">
+        <button id="blind-reveal" type="button">💿 Reveal</button>
+        <button id="blind-skip" type="button">➡ Skip</button>
+      </div>
+      <div class="blind-details" ${isRevealed ? "" : "hidden"}>
+        <h2>${escapeHTML(currentAlbum.title)}</h2>
+        <p>${escapeHTML(currentAlbum.artist)} · ${escapeHTML(currentAlbum.year)} · ${escapeHTML(currentAlbum.genre)}</p>
+        <p>${escapeHTML(currentAlbum.description)}</p>
+        <div class="blind-link-row">
+          <a class="button-link" href="${currentAlbum.bandcampUrl}" target="_blank" rel="noopener noreferrer">Open on Bandcamp</a>
+          <a class="button-link" href="${currentAlbum.spotifyUrl}" target="_blank" rel="noopener noreferrer">Open on Spotify</a>
+          <a class="button-link" href="${currentAlbum.youtubeSearchUrl}" target="_blank" rel="noopener noreferrer">Search on YouTube</a>
+          <button id="blind-favorite" type="button">${isFavorite ? "Saved favorite" : "Save favorite"}</button>
+        </div>
+      </div>
+    `;
+
+    document.querySelector("#blind-reveal").addEventListener("click", () => {
+      recordBlindReveal(currentAlbum);
+      isRevealed = true;
+      renderAlbum();
+    });
+
+    document.querySelector("#blind-skip").addEventListener("click", () => {
+      currentAlbum = getRandomBlindAlbum(currentAlbum.id);
+      isRevealed = false;
+      renderAlbum();
+    });
+
+    const favoriteButton = document.querySelector("#blind-favorite");
+    if (favoriteButton) {
+      favoriteButton.addEventListener("click", () => {
+        const isNowFavorite = toggleBlindFavorite(currentAlbum);
+        favoriteButton.textContent = isNowFavorite ? "Saved favorite" : "Save favorite";
+      });
+    }
+  }
+
+  renderAlbum();
+}
+
 function showDailyObject() {
   const dailyObjectCard = document.querySelector("#daily-object");
   if (!dailyObjectCard) {
@@ -1088,6 +1477,108 @@ function setupRandomRadio() {
   });
 }
 
+function getControlTowerHTML() {
+  return `
+    <aside class="desk-sidebar" aria-label="Control tower navigation">
+      <h2>Control Tower</h2>
+      <button class="desk-label" type="button" aria-expanded="true" aria-controls="desk-section">
+        Desk
+        <span aria-hidden="true">-</span>
+      </button>
+      <div id="desk-section" class="desk-section-links">
+        <a href="coffee-break.html"><span>☕</span>Coffee Break</a>
+        <a href="radio.html"><span>📻</span>Groovy Radio</a>
+        <a href="blind-listening.html"><span>💿</span>Blind Listening</a>
+        <a href="collective-thinking.html"><span>💭</span>Collective Thinking</a>
+        <a href="scratchpad.html"><span>📝</span>Scratchpad</a>
+      </div>
+      <button class="desk-label" type="button" aria-expanded="true" aria-controls="internet-drawer-section">
+        Internet Drawer
+        <span aria-hidden="true">-</span>
+      </button>
+      <div id="internet-drawer-section" class="desk-section-links">
+        <a href="https://www.window-swap.com/" target="_blank" rel="noopener noreferrer"><span>🪟</span>WindowSwap</a>
+        <a href="https://radio.garden/" target="_blank" rel="noopener noreferrer"><span>🌍</span>Radio Garden</a>
+        <a href="https://apod.nasa.gov/apod/" target="_blank" rel="noopener noreferrer"><span>🚀</span>NASA APOD</a>
+        <a href="https://play.typeracer.com/?universe=jokes" target="_blank" rel="noopener noreferrer"><span>⌨️</span>TypeRacer</a>
+        <a href="https://everynoise.com/" target="_blank" rel="noopener noreferrer"><span>🎧</span>Every Noise at Once</a>
+        <a href="https://theuselessweb.com/" target="_blank" rel="noopener noreferrer"><span>🎲</span>Random Internet</a>
+        <a href="internet-drawer.html"><span>🗂</span>Add to drawer</a>
+      </div>
+      <div class="control-tower-footer">
+        <button class="desk-label" type="button" aria-expanded="false" aria-controls="hotkeys-section">
+          Hotkeys
+          <span aria-hidden="true">+</span>
+        </button>
+        <div id="hotkeys-section" class="desk-section-links hotkeys-list is-collapsed">
+          <p><kbd>C</kbd> Control Tower</p>
+          <p><kbd>Z</kbd> Zen mode</p>
+        </div>
+      </div>
+    </aside>
+  `;
+}
+
+function setupControlTowerShell() {
+  if (!document.querySelector(".desk-sidebar")) {
+    document.body.insertAdjacentHTML("afterbegin", getControlTowerHTML());
+  }
+
+  const sidebar = document.querySelector(".desk-sidebar");
+  if (!sidebar || sidebar.querySelector(".control-tower-toggle")) {
+    return;
+  }
+
+  const toggleButton = document.createElement("button");
+  toggleButton.className = "control-tower-toggle";
+  toggleButton.type = "button";
+  toggleButton.setAttribute("aria-label", "Collapse Control Tower");
+  toggleButton.title = "Press C to open / close Control Tower";
+  toggleButton.textContent = "‹";
+  sidebar.prepend(toggleButton);
+
+  function applyCollapsedState(isCollapsed) {
+    document.body.classList.toggle("control-tower-collapsed", isCollapsed);
+    toggleButton.textContent = isCollapsed ? "›" : "‹";
+    toggleButton.setAttribute("aria-label", isCollapsed ? "Expand Control Tower" : "Collapse Control Tower");
+  }
+
+  applyCollapsedState(localStorage.getItem(controlTowerCollapsedKey) === "true");
+
+  toggleButton.addEventListener("click", () => {
+    const isCollapsed = !document.body.classList.contains("control-tower-collapsed");
+    localStorage.setItem(controlTowerCollapsedKey, String(isCollapsed));
+    applyCollapsedState(isCollapsed);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const activeElement = document.activeElement;
+    const isWriting = activeElement && (
+      activeElement.tagName === "INPUT" ||
+      activeElement.tagName === "TEXTAREA" ||
+      activeElement.isContentEditable
+    );
+
+    if (isWriting || event.key.toLowerCase() !== "c") {
+      return;
+    }
+
+    event.preventDefault();
+    toggleButton.click();
+  });
+}
+
+function updateControlTowerToggleIcon() {
+  const toggleButton = document.querySelector(".control-tower-toggle");
+  if (!toggleButton) {
+    return;
+  }
+
+  const isCollapsed = document.body.classList.contains("control-tower-collapsed") || document.body.classList.contains("zen-mode");
+  toggleButton.textContent = isCollapsed ? "›" : "‹";
+  toggleButton.setAttribute("aria-label", isCollapsed ? "Expand Control Tower" : "Collapse Control Tower");
+}
+
 function setupCollapsibleSidebar() {
   const sidebarButtons = document.querySelectorAll(".desk-label[aria-controls]");
 
@@ -1150,6 +1641,7 @@ function setupZenMode() {
     }
 
     document.body.classList.toggle("zen-mode");
+    updateControlTowerToggleIcon();
   });
 }
 
@@ -1188,6 +1680,7 @@ function setupTheme() {
   applyTheme(safeTheme);
 }
 
+setupControlTowerShell();
 setupTheme();
 clearThoughtsAfterMondayNoon();
 showSavedPosts();
@@ -1196,6 +1689,7 @@ setupThoughtForm();
 showCollectiveThoughts();
 setupInternetDrawerForm();
 renderInternetDrawer();
+setupBlindListening();
 showDailyObject();
 showFullSavedPost();
 setupSearch();
@@ -1207,5 +1701,6 @@ setupRandomArticle();
 setupRandomRadio();
 setupCollapsibleSidebar();
 setupCollapsibleMoodPanel();
+updateControlTowerToggleIcon();
 updatePostCount();
 
