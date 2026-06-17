@@ -7,75 +7,75 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Wandering and Building - Online</h1>
-    <p>A blog about learning web development, building projects, and documenting the process.</p>
-    <p class="identity-line">A public notebook for web experiments and broken ideas.</p>
-    <nav>
-      <a href="#saved-posts">Posts</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-      <a href="write.html">Write</a>
-    </nav>
-    <section class="search-section">
-      <label for="post-search">Search posts</label>
-      <span class="search-icon">⌕</span>
-      <input id="post-search" type="search" placeholder="Search">
-      <button id="clear-search" type="button" aria-label="Clear search" hidden>×</button>
-      <p id="post-count"></p>
-    </section>
+  <aside class="desk-sidebar" aria-label="Control tower navigation">
+    <h2>Control Tower</h2>
+    <button class="desk-label" type="button" aria-expanded="true" aria-controls="desk-section">
+      Desk
+      <span aria-hidden="true">-</span>
+    </button>
+    <div id="desk-section" class="desk-section-links">
+      <a href="coffee-break.html"><span>☕</span>Coffee Break</a>
+      <a href="radio.html"><span>📻</span>Groovy Radio</a>
+      <a href="collective-thinking.html"><span>💭</span>Collective Thinking</a>
+      <a href="https://theuselessweb.com/" target="_blank" rel="noopener noreferrer"><span>🎲</span>Random Internet</a>
+      <a href="scratchpad.html"><span>📝</span>Scratchpad</a>
+    </div>
+  </aside>
+
+  <header class="hero">
+    <h1>Wandering and Building</h1>
+    <p>A small internet room for relaxing, reading, watching quiet visuals, and messing with tiny interactions.</p>
+    <div class="hero-controls">
+      <nav>
+        <a href="#saved-posts">Read</a>
+        <a href="#about">About</a>
+      </nav>
+      <section id="mood-panel" class="mood-panel-compact is-collapsed" aria-label="Mood Panel">
+        <button class="mood-toggle" type="button" aria-expanded="false" aria-controls="mood-options">
+          Mood
+          <span aria-hidden="true">+</span>
+        </button>
+        <div id="mood-options" class="mood-options-panel">
+          <div class="mood-actions">
+          <button type="button" data-mode="cyberpunk">Cyberpunk</button>
+          <button type="button" data-mode="gotham-city">Gotham City</button>
+          <button type="button" data-mode="pokemon-gameboy">Pokemon Gameboy</button>
+          </div>
+          <p id="current-mood">Current mood: Cyberpunk</p>
+        </div>
+      </section>
+    </div>
   </header>
 
   <main>
-    <section id="series">
-      <h2>Building a Blog</h2>
-      <ol class="series-list">
-        <li class="done"><a href="https://github.com/salabax/blog-web-page" target="_blank" rel="noopener noreferrer">HTML</a></li>
-        <li class="done"><a href="https://github.com/salabax/blog-web-page" target="_blank" rel="noopener noreferrer">CSS</a></li>
-        <li class="done"><a href="https://github.com/salabax/blog-web-page" target="_blank" rel="noopener noreferrer">JavaScript</a></li>
-        <li class="done"><a href="https://github.com/salabax/blog-web-page" target="_blank" rel="noopener noreferrer">LocalStorage</a></li>
-        <li class="current"><a href="https://github.com/salabax/blog-web-page" target="_blank" rel="noopener noreferrer">Deployment</a></li>
-      </ol>
-
-      <article class="session-report">
-        <h3>Session 1: First version online</h3>
-        <time datetime="2026-06-13">13/06/26</time>
-        <p>Started from an empty folder and built the first version of this blog with HTML, CSS, and JavaScript.</p>
-        <ul>
-          <li>Created the homepage structure.</li>
-          <li>Added styling, navigation, post pages, and a footer.</li>
-          <li>Built a browser-based writing flow with edit and delete.</li>
-          <li>Added local posts, images, search, themes, and GitHub Pages deployment.</li>
-        </ul>
-      </article>
-    </section>
-
-    <section id="control-panel">
-      <h2>Control Panel</h2>
-      <div class="control-actions">
-        <button id="saved-filter" type="button" aria-pressed="false">Saved Articles</button>
-        <button id="theme-control" type="button">Theme</button>
-        <button id="lab-mode" type="button">Lab Mode: OFF</button>
-        <button id="random-post" type="button">Random Post</button>
-        <button id="chaos-button" type="button">Chaos</button>
-        <button id="reset-controls" type="button">Reset</button>
+    <section id="read-something" class="hub-section">
+      <h2>Read Something</h2>
+      <div class="read-control-row">
+        <div class="read-tools">
+          <button id="saved-filter" type="button" aria-pressed="false">Saved Articles</button>
+          <button id="random-post" type="button">Random Post</button>
+        </div>
+      <section class="search-section">
+        <label for="post-search">Search posts</label>
+        <input id="post-search" type="search" placeholder="Search">
+        <button id="clear-search" type="button" aria-label="Clear search" hidden>×</button>
+        <p id="post-count"></p>
+        </section>
       </div>
-      <p id="site-mood">Mood: confused but building</p>
     </section>
-
     <section id="saved-posts"></section>
     <section id="older-saved-posts"></section>
     <p id="no-search-results" hidden>No posts found.</p>
 
-    <section id="about">
-      <h2>About this blog</h2>
-      <p>This blog is my practice space while I learn how to build websites.</p>
+    <section id="about" class="hub-section">
+      <h2>About this room</h2>
+      <p>This is a static chill hub built with HTML, CSS, and JavaScript. The reading cards still use local browser storage, so no backend or accounts are involved yet.</p>
     </section>
 
   </main>
 
   <footer id="contact">
-    <p>Learning by building small public projects. This blog tracks what I build and what I break.</p>
+    <p>A small internet room for relaxing, reading, watching quiet visuals, and messing with tiny interactions.</p>
     <p>Built with HTML, CSS, and JavaScript. Hosted on GitHub Pages.</p>
     <h2>Contact</h2>
     <p>Instagram: <a href="https://www.instagram.com/lensbylego/" target="_blank" rel="noopener noreferrer">@lensbylego</a></p>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One Thought - Wandering and Building</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>One Thought</h1>
+    <p>Anonymous, short, and local to this browser for now.</p>
+    <nav>
+      <a href="scratchpad.html">Scratchpad</a>
+      <a href="collective-thinking.html">Collective Thinking</a>
+    </nav>
+  </header>
+
+  <main>
+    <form id="thought-form" autocomplete="off">
+      <label for="thought-body">Thought</label>
+      <textarea id="thought-body" rows="8" maxlength="1600" required></textarea>
+      <p class="hint"><span id="thought-word-count">0</span>/200 words</p>
+      <button type="submit">Post anonymously</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>Built with HTML, CSS, and JavaScript. Hosted on GitHub Pages.</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

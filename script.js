@@ -1,12 +1,13 @@
 ﻿const postsKey = "my-first-blog-posts";
 const themeKey = "my-first-blog-theme";
-const labModeKey = "my-first-blog-lab-mode";
 const savedArticlesKey = "my-first-blog-saved-articles";
+const thoughtsKey = "wandering-collective-thoughts";
+const thoughtsClearKey = "wandering-collective-thoughts-last-clear";
 const placeholderImage = "images/first-post-placeholder.svg";
 const themes = [
-  { name: "dark", label: "Dark" },
   { name: "cyberpunk", label: "Cyberpunk" },
-  { name: "paper", label: "Paper notebook" }
+  { name: "gotham-city", label: "Gotham City" },
+  { name: "pokemon-gameboy", label: "Pokemon Gameboy" }
 ];
 const siteMoods = [
   "confused but building",
@@ -15,6 +16,14 @@ const siteMoods = [
   "GitHub Pages survivor",
   "backend avoided successfully"
 ];
+const chillQuotes = [
+  "Stay for the rain.",
+  "Backend avoided successfully.",
+  "Small rooms can hold big ideas.",
+  "Nothing urgent is happening here.",
+  "Open a tab and let the internet breathe."
+];
+const radioGardenUrl = "https://radio.garden/";
 const starterPosts = [
   {
     title: "First Website Chaos",
@@ -41,6 +50,23 @@ const starterPosts = [
     isStarter: true
   }
 ];
+const starterThoughts = [
+  {
+    body: "Maybe a website can feel less like a feed and more like a room.",
+    createdAt: "2026-06-15T18:30:00.000Z",
+    isStarter: true
+  },
+  {
+    body: "I like the idea that unfinished things can still have atmosphere.",
+    createdAt: "2026-06-16T10:15:00.000Z",
+    isStarter: true
+  },
+  {
+    body: "Small public projects are weirdly motivating because they make learning visible.",
+    createdAt: "2026-06-17T09:45:00.000Z",
+    isStarter: true
+  }
+];
 
 function getPosts() {
   const savedPosts = localStorage.getItem(postsKey);
@@ -58,6 +84,35 @@ function getSavedArticleIds() {
 
 function saveArticleIds(articleIds) {
   localStorage.setItem(savedArticlesKey, JSON.stringify(articleIds));
+}
+
+function getThoughts() {
+  const savedThoughts = localStorage.getItem(thoughtsKey);
+  return savedThoughts ? JSON.parse(savedThoughts) : [];
+}
+
+function saveThoughts(thoughts) {
+  localStorage.setItem(thoughtsKey, JSON.stringify(thoughts));
+}
+
+function getThisMondayNoon() {
+  const now = new Date();
+  const mondayNoon = new Date(now);
+  const daysSinceMonday = (now.getDay() + 6) % 7;
+  mondayNoon.setDate(now.getDate() - daysSinceMonday);
+  mondayNoon.setHours(12, 0, 0, 0);
+  return mondayNoon;
+}
+
+function clearThoughtsAfterMondayNoon() {
+  const now = new Date();
+  const mondayNoon = getThisMondayNoon();
+  const lastClear = localStorage.getItem(thoughtsClearKey);
+
+  if (now >= mondayNoon && lastClear !== mondayNoon.toISOString()) {
+    saveThoughts([]);
+    localStorage.setItem(thoughtsClearKey, mondayNoon.toISOString());
+  }
 }
 
 function getPostId(post) {
@@ -420,6 +475,73 @@ function setupPostForm() {
   });
 }
 
+function countWords(text) {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function setupThoughtForm() {
+  const form = document.querySelector("#thought-form");
+  if (!form) {
+    return;
+  }
+
+  const thoughtBody = document.querySelector("#thought-body");
+  const wordCount = document.querySelector("#thought-word-count");
+
+  function updateWordCount() {
+    const totalWords = countWords(thoughtBody.value);
+    wordCount.textContent = totalWords;
+    wordCount.classList.toggle("over-limit", totalWords > 200);
+  }
+
+  thoughtBody.addEventListener("input", updateWordCount);
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const thoughtText = thoughtBody.value.trim();
+    const totalWords = countWords(thoughtText);
+
+    if (!thoughtText || totalWords > 200) {
+      thoughtBody.focus();
+      updateWordCount();
+      return;
+    }
+
+    const thoughts = getThoughts();
+    thoughts.unshift({
+      body: thoughtText,
+      createdAt: new Date().toISOString()
+    });
+
+    saveThoughts(thoughts);
+    window.location.href = "collective-thinking.html";
+  });
+
+  updateWordCount();
+}
+
+function showCollectiveThoughts() {
+  const thoughtList = document.querySelector("#collective-thinking-list");
+  if (!thoughtList) {
+    return;
+  }
+
+  const thoughts = [...getThoughts(), ...starterThoughts];
+
+  if (thoughts.length === 0) {
+    thoughtList.innerHTML = `<p class="empty-posts">No thoughts yet.</p>`;
+    return;
+  }
+
+  thoughtList.innerHTML = thoughts.map((thought) => `
+    <article class="thought-card">
+      <time datetime="${thought.createdAt}">${formatDate(thought.createdAt)}</time>
+      <p>${escapeHTML(thought.body)}</p>
+      ${thought.isStarter ? `<p class="hint">example thought</p>` : ""}
+    </article>
+  `).join("");
+}
+
 function showFullSavedPost() {
   const savedPost = document.querySelector("#saved-post");
   if (!savedPost) {
@@ -444,6 +566,10 @@ function showFullSavedPost() {
     <img src="${escapeHTML(imageSource)}" alt="">
     <div class="post-content">${sanitizeHTML(getPostBodyHTML(post))}</div>
   `;
+
+  if (params.get("zen") === "1") {
+    document.body.classList.add("zen-mode");
+  }
 }
 
 function updatePostCount() {
@@ -528,59 +654,9 @@ function setupRandomPost() {
   });
 }
 
-function setupLabMode() {
-  const labModeButton = document.querySelector("#lab-mode");
-  const savedLabMode = localStorage.getItem(labModeKey) === "on";
-
-  function applyLabMode(isOn) {
-    document.body.classList.toggle("lab-mode", isOn);
-    localStorage.setItem(labModeKey, isOn ? "on" : "off");
-
-    if (labModeButton) {
-      labModeButton.textContent = `Lab Mode: ${isOn ? "ON" : "OFF"}`;
-      labModeButton.setAttribute("aria-pressed", String(isOn));
-    }
-  }
-
-  applyLabMode(savedLabMode);
-
-  if (!labModeButton) {
-    return;
-  }
-
-  labModeButton.addEventListener("click", () => {
-    applyLabMode(!document.body.classList.contains("lab-mode"));
-  });
-}
-
 function setupControlPanel() {
-  const chaosButton = document.querySelector("#chaos-button");
-  const resetButton = document.querySelector("#reset-controls");
   const savedFilterButton = document.querySelector("#saved-filter");
-  const siteMood = document.querySelector("#site-mood");
-  const themeControl = document.querySelector("#theme-control");
-  const themePanel = document.querySelector(".theme-panel");
   let showingSavedOnly = false;
-
-  function setRandomMood() {
-    if (!siteMood) {
-      return;
-    }
-
-    const randomMood = siteMoods[Math.floor(Math.random() * siteMoods.length)];
-    siteMood.textContent = `Mood: ${randomMood}`;
-  }
-
-  if (themeControl && themePanel) {
-    themePanel.hidden = true;
-    themeControl.addEventListener("click", () => {
-      themePanel.hidden = !themePanel.hidden;
-    });
-  }
-
-  if (chaosButton) {
-    chaosButton.addEventListener("click", setRandomMood);
-  }
 
   if (savedFilterButton) {
     savedFilterButton.addEventListener("click", () => {
@@ -596,39 +672,95 @@ function setupControlPanel() {
       updatePostCount();
     });
   }
+}
 
-  if (resetButton) {
-    resetButton.addEventListener("click", () => {
-      document.body.classList.remove("lab-mode");
-      localStorage.setItem(labModeKey, "off");
-
-      const labModeButton = document.querySelector("#lab-mode");
-      if (labModeButton) {
-        labModeButton.textContent = "Lab Mode: OFF";
-        labModeButton.setAttribute("aria-pressed", "false");
-      }
-
-      if (themePanel) {
-        themePanel.hidden = true;
-      }
-
-      if (siteMood) {
-        siteMood.textContent = "Mood: confused but building";
-      }
-
-      showingSavedOnly = false;
-      document.querySelectorAll(".post-card").forEach((card) => {
-        card.hidden = false;
-      });
-
-      if (savedFilterButton) {
-        savedFilterButton.textContent = "Saved Articles";
-        savedFilterButton.setAttribute("aria-pressed", "false");
-      }
-
-      updatePostCount();
-    });
+function setupRandomQuote() {
+  const quote = document.querySelector("#random-quote");
+  const quoteButton = document.querySelector("#random-quote-button");
+  if (!quote || !quoteButton) {
+    return;
   }
+
+  quoteButton.addEventListener("click", () => {
+    const randomQuote = chillQuotes[Math.floor(Math.random() * chillQuotes.length)];
+    quote.textContent = randomQuote;
+  });
+}
+
+function setupRandomArticle() {
+  const articleButton = document.querySelector("#random-article-button");
+  if (!articleButton) {
+    return;
+  }
+
+  articleButton.addEventListener("click", () => {
+    const posts = getDisplayPosts();
+    if (posts.length === 0) {
+      articleButton.textContent = "No articles yet";
+      return;
+    }
+
+    const randomPost = posts[Math.floor(Math.random() * posts.length)];
+    const postLink = randomPost.isStarter
+      ? `post.html?starter=${randomPost.starterIndex}&zen=1`
+      : `post.html?id=${randomPost.localIndex}&zen=1`;
+
+    window.location.href = postLink;
+  });
+}
+
+function setupRandomRadio() {
+  const radioButton = document.querySelector("#random-radio-button");
+  if (!radioButton) {
+    return;
+  }
+
+  radioButton.addEventListener("click", () => {
+    window.open(radioGardenUrl, "_blank", "noopener,noreferrer");
+  });
+}
+
+function setupCollapsibleSidebar() {
+  const sidebarButtons = document.querySelectorAll(".desk-label[aria-controls]");
+
+  sidebarButtons.forEach((button) => {
+    const section = document.querySelector(`#${button.getAttribute("aria-controls")}`);
+    const icon = button.querySelector("span");
+
+    if (!section) {
+      return;
+    }
+
+    button.addEventListener("click", () => {
+      const isOpen = button.getAttribute("aria-expanded") === "true";
+      button.setAttribute("aria-expanded", String(!isOpen));
+      section.classList.toggle("is-collapsed", isOpen);
+
+      if (icon) {
+        icon.textContent = isOpen ? "+" : "-";
+      }
+    });
+  });
+}
+
+function setupCollapsibleMoodPanel() {
+  const moodPanel = document.querySelector(".mood-panel-compact");
+  const moodToggle = document.querySelector(".mood-toggle");
+  if (!moodPanel || !moodToggle) {
+    return;
+  }
+
+  const icon = moodToggle.querySelector("span");
+
+  moodToggle.addEventListener("click", () => {
+    const isOpen = moodToggle.getAttribute("aria-expanded") === "true";
+    moodToggle.setAttribute("aria-expanded", String(!isOpen));
+    moodPanel.classList.toggle("is-collapsed", isOpen);
+
+    if (icon) {
+      icon.textContent = isOpen ? "+" : "-";
+    }
+  });
 }
 
 function setupZenMode() {
@@ -654,64 +786,55 @@ function setupZenMode() {
 }
 
 function setupTheme() {
-  const savedTheme = localStorage.getItem(themeKey) || "dark";
-  const header = document.querySelector("header");
-  const controlPanel = document.querySelector("#control-panel");
+  const savedTheme = localStorage.getItem(themeKey) || "cyberpunk";
+  const currentMood = document.querySelector("#current-mood");
 
   function applyTheme(themeName) {
     themes.forEach((theme) => {
       document.body.classList.remove(theme.name);
     });
 
-    document.body.classList.remove("dark-mode");
+    document.body.classList.remove("dark", "dark-mode", "light", "paper", "terminal");
     document.body.classList.add(themeName);
     localStorage.setItem(themeKey, themeName);
 
-    document.querySelectorAll(".theme-option").forEach((button) => {
-      const isActive = button.dataset.theme === themeName;
+    const activeTheme = themes.find((theme) => theme.name === themeName);
+    if (currentMood && activeTheme) {
+      currentMood.textContent = `Current mood: ${activeTheme.label}`;
+    }
+
+    document.querySelectorAll("[data-mode]").forEach((button) => {
+      const isActive = button.dataset.mode === themeName;
       button.classList.toggle("active", isActive);
       button.setAttribute("aria-pressed", String(isActive));
     });
   }
 
-  const safeTheme = themes.some((theme) => theme.name === savedTheme) ? savedTheme : "dark";
-  applyTheme(safeTheme);
-
-  if (!header && !controlPanel) {
-    return;
-  }
-
-  const themePanel = document.createElement("section");
-  themePanel.className = "theme-panel";
-  themePanel.setAttribute("aria-label", "Theme modes");
-  themePanel.innerHTML = `
-    <p>Theme modes</p>
-    <div class="theme-options">
-      ${themes
-        .map((theme) => `<button class="theme-option" type="button" data-theme="${theme.name}">${theme.label}</button>`)
-        .join("")}
-    </div>
-  `;
-
-  (controlPanel || header).appendChild(themePanel);
-
-  themePanel.querySelectorAll(".theme-option").forEach((button) => {
+  document.querySelectorAll("[data-mode]").forEach((button) => {
     button.addEventListener("click", () => {
-      applyTheme(button.dataset.theme);
+      applyTheme(button.dataset.mode);
     });
   });
 
+  const safeTheme = themes.some((theme) => theme.name === savedTheme) ? savedTheme : "cyberpunk";
   applyTheme(safeTheme);
 }
 
 setupTheme();
+clearThoughtsAfterMondayNoon();
 showSavedPosts();
 setupPostForm();
+setupThoughtForm();
+showCollectiveThoughts();
 showFullSavedPost();
 setupSearch();
 setupRandomPost();
-setupLabMode();
 setupControlPanel();
 setupZenMode();
+setupRandomQuote();
+setupRandomArticle();
+setupRandomRadio();
+setupCollapsibleSidebar();
+setupCollapsibleMoodPanel();
 updatePostCount();
 
