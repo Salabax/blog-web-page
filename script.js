@@ -1,6 +1,7 @@
 ﻿const postsKey = "my-first-blog-posts";
 const themeKey = "my-first-blog-theme";
 const savedArticlesKey = "my-first-blog-saved-articles";
+// Legacy key names are kept so existing browser-saved posts, moods, and saved articles do not disappear.
 const thoughtsKey = "wandering-collective-thoughts";
 const thoughtsClearKey = "wandering-collective-thoughts-last-clear";
 const drawerLinksKey = "wandering-internet-drawer-links";
@@ -9,6 +10,8 @@ const blindDiscoveredAlbumsKey = "wandering-blind-discovered-albums";
 const blindFavoriteAlbumsKey = "wandering-blind-favorite-albums";
 const coffeeBreakPrefsKey = "wandering-coffee-break-preferences";
 const controlTowerCollapsedKey = "wandering-control-tower-collapsed";
+const siteScaleKey = "wandering-site-scale";
+const defaultSiteScale = "0.75";
 const placeholderImage = "images/first-post-placeholder.svg";
 const themes = [
   { name: "cyberpunk", label: "Cyberpunk" },
@@ -578,6 +581,30 @@ function writeLocalJSON(key, value) {
   }
 }
 
+function readLocalString(key, fallbackValue) {
+  try {
+    return localStorage.getItem(key) || fallbackValue;
+  } catch (error) {
+    return fallbackValue;
+  }
+}
+
+function writeLocalString(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+function setupSiteScale() {
+  const savedScale = readLocalString(siteScaleKey, defaultSiteScale);
+
+  writeLocalString(siteScaleKey, savedScale);
+  document.documentElement.style.setProperty("--site-scale", savedScale);
+}
+
 function createDemoAlbumCover(label, backgroundColor, primaryColor, secondaryColor) {
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
@@ -649,11 +676,11 @@ function getThisMondayNoon() {
 function clearThoughtsAfterMondayNoon() {
   const now = new Date();
   const mondayNoon = getThisMondayNoon();
-  const lastClear = localStorage.getItem(thoughtsClearKey);
+  const lastClear = readLocalString(thoughtsClearKey, "");
 
   if (now >= mondayNoon && lastClear !== mondayNoon.toISOString()) {
     saveThoughts([]);
-    localStorage.setItem(thoughtsClearKey, mondayNoon.toISOString());
+    writeLocalString(thoughtsClearKey, mondayNoon.toISOString());
   }
 }
 
@@ -1413,6 +1440,7 @@ function setupRandomPost() {
 
 function setupControlPanel() {
   const savedFilterButton = document.querySelector("#saved-filter");
+  const savedFilterEmpty = document.querySelector("#saved-filter-empty");
   let showingSavedOnly = false;
 
   if (savedFilterButton) {
@@ -1426,6 +1454,10 @@ function setupControlPanel() {
 
       savedFilterButton.setAttribute("aria-pressed", String(showingSavedOnly));
       savedFilterButton.textContent = showingSavedOnly ? "All Articles" : "Saved Articles";
+      if (savedFilterEmpty) {
+        const hasVisibleCards = Array.from(document.querySelectorAll(".post-card")).some((card) => !card.hidden);
+        savedFilterEmpty.hidden = !showingSavedOnly || hasVisibleCards;
+      }
       updatePostCount();
     });
   }
@@ -1481,6 +1513,7 @@ function getControlTowerHTML() {
   return `
     <aside class="desk-sidebar" aria-label="Control tower navigation">
       <h2>Control Tower</h2>
+      <a class="tower-icon-link" href="index.html" aria-label="Home"><span>⌂</span></a>
       <button class="desk-label" type="button" aria-expanded="true" aria-controls="desk-section">
         Desk
         <span aria-hidden="true">-</span>
@@ -1520,9 +1553,8 @@ function getControlTowerHTML() {
 }
 
 function setupControlTowerShell() {
-  if (!document.querySelector(".desk-sidebar")) {
-    document.body.insertAdjacentHTML("afterbegin", getControlTowerHTML());
-  }
+  document.querySelector(".desk-sidebar")?.remove();
+  document.body.insertAdjacentHTML("afterbegin", getControlTowerHTML());
 
   const sidebar = document.querySelector(".desk-sidebar");
   if (!sidebar || sidebar.querySelector(".control-tower-toggle")) {
@@ -1543,11 +1575,11 @@ function setupControlTowerShell() {
     toggleButton.setAttribute("aria-label", isCollapsed ? "Expand Control Tower" : "Collapse Control Tower");
   }
 
-  applyCollapsedState(localStorage.getItem(controlTowerCollapsedKey) === "true");
+  applyCollapsedState(readLocalString(controlTowerCollapsedKey, "false") === "true");
 
   toggleButton.addEventListener("click", () => {
     const isCollapsed = !document.body.classList.contains("control-tower-collapsed");
-    localStorage.setItem(controlTowerCollapsedKey, String(isCollapsed));
+    writeLocalString(controlTowerCollapsedKey, String(isCollapsed));
     applyCollapsedState(isCollapsed);
   });
 
@@ -1646,7 +1678,7 @@ function setupZenMode() {
 }
 
 function setupTheme() {
-  const savedTheme = localStorage.getItem(themeKey) || "cyberpunk";
+  const savedTheme = readLocalString(themeKey, "cyberpunk");
   const currentMood = document.querySelector("#current-mood");
 
   function applyTheme(themeName) {
@@ -1656,7 +1688,7 @@ function setupTheme() {
 
     document.body.classList.remove("dark", "dark-mode", "light", "paper", "terminal");
     document.body.classList.add(themeName);
-    localStorage.setItem(themeKey, themeName);
+    writeLocalString(themeKey, themeName);
 
     const activeTheme = themes.find((theme) => theme.name === themeName);
     if (currentMood && activeTheme) {
@@ -1680,6 +1712,7 @@ function setupTheme() {
   applyTheme(safeTheme);
 }
 
+setupSiteScale();
 setupControlTowerShell();
 setupTheme();
 clearThoughtsAfterMondayNoon();

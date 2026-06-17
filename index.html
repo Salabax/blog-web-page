@@ -7,44 +7,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <aside class="desk-sidebar" aria-label="Control tower navigation">
-    <h2>Control Tower</h2>
-    <button class="desk-label" type="button" aria-expanded="true" aria-controls="desk-section">
-      Desk
-      <span aria-hidden="true">-</span>
-    </button>
-    <div id="desk-section" class="desk-section-links">
-      <a href="coffee-break.html"><span>☕</span>Coffee Break</a>
-      <a href="radio.html"><span>📻</span>Groovy Radio</a>
-      <a href="blind-listening.html"><span>💿</span>Blind Listening</a>
-      <a href="collective-thinking.html"><span>💭</span>Collective Thinking</a>
-      <a href="scratchpad.html"><span>📝</span>Scratchpad</a>
-    </div>
-    <button class="desk-label" type="button" aria-expanded="true" aria-controls="internet-drawer-section">
-      Internet Drawer
-      <span aria-hidden="true">-</span>
-    </button>
-    <div id="internet-drawer-section" class="desk-section-links">
-      <a href="https://www.window-swap.com/" target="_blank" rel="noopener noreferrer"><span>🪟</span>WindowSwap</a>
-      <a href="https://radio.garden/" target="_blank" rel="noopener noreferrer"><span>🌍</span>Radio Garden</a>
-      <a href="https://apod.nasa.gov/apod/" target="_blank" rel="noopener noreferrer"><span>🚀</span>NASA APOD</a>
-      <a href="https://play.typeracer.com/?universe=jokes" target="_blank" rel="noopener noreferrer"><span>⌨️</span>TypeRacer</a>
-      <a href="https://everynoise.com/" target="_blank" rel="noopener noreferrer"><span>🎧</span>Every Noise at Once</a>
-      <a href="https://theuselessweb.com/" target="_blank" rel="noopener noreferrer"><span>🎲</span>Random Internet</a>
-      <a href="internet-drawer.html"><span>🗂</span>Add to drawer</a>
-    </div>
-    <div class="control-tower-footer">
-      <button class="desk-label" type="button" aria-expanded="false" aria-controls="hotkeys-section">
-        Hotkeys
-        <span aria-hidden="true">+</span>
-      </button>
-      <div id="hotkeys-section" class="desk-section-links hotkeys-list is-collapsed">
-        <p><kbd>C</kbd> Control Tower</p>
-        <p><kbd>Z</kbd> Zen mode</p>
-      </div>
-    </div>
-  </aside>
-
   <div class="tiny-tv" aria-hidden="true">
     <div class="tv-screen">
       <span class="dvd-logo">DVD</span>
@@ -97,6 +59,7 @@
     </section>
     <section id="saved-posts"></section>
     <section id="older-saved-posts"></section>
+    <p id="saved-filter-empty" class="empty-posts" hidden>No saved articles yet.</p>
     <p id="no-search-results" hidden>No posts found.</p>
 
     <section id="about" class="hub-section">
