@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internet Drawer - Wandering and Building</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Internet Drawer</h1>
+    <p>A curated internet instead of an algorithmic feed.</p>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="scratchpad.html">Scratchpad</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hub-section">
+      <h2>Saved Links</h2>
+      <div id="internet-drawer-links" class="internet-drawer-links"></div>
+    </section>
+
+    <section class="hub-section">
+      <h2>Add Link</h2>
+      <form id="internet-drawer-form" autocomplete="off">
+        <label for="drawer-link-name">Name</label>
+        <input id="drawer-link-name" type="text" required>
+
+        <label for="drawer-link-url">URL</label>
+        <input id="drawer-link-url" type="url" placeholder="https://example.com" required>
+
+        <button type="submit">Add to drawer</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>Built with HTML, CSS, and JavaScript. Hosted on GitHub Pages.</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

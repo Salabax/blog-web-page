@@ -96,8 +96,9 @@ body.terminal {
 }
 
 body {
+  min-width: 860px;
   max-width: 860px;
-  margin: 40px auto;
+  margin: 40px 0 40px 310px;
   padding: 0 28px;
   font-family: Arial, sans-serif;
   line-height: 1.6;
@@ -113,6 +114,7 @@ body {
   width: 260px;
   height: 100vh;
   box-sizing: border-box;
+  overflow-y: auto;
   padding: 28px 22px;
   border-right: 1px solid var(--line-color);
   background-color: var(--card-background);
@@ -183,13 +185,6 @@ body {
 .desk-sidebar a:hover {
   color: var(--heading-color);
   background-color: var(--field-background);
-}
-
-@media (min-width: 701px) {
-  body {
-    margin-left: 310px;
-    margin-right: auto;
-  }
 }
 
 body.paper {
@@ -624,6 +619,73 @@ main > .hub-section:first-child {
   margin-top: 0;
 }
 
+.daily-object-card {
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 48px;
+  padding: 18px 18px 46px;
+  border: 1px solid var(--line-color);
+  border-radius: 8px;
+  background-color: var(--card-background);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--heading-color) 18%, transparent);
+}
+
+.daily-object-kicker {
+  margin-bottom: 12px;
+  color: var(--muted-color);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.daily-object-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.daily-object-emoji {
+  flex: 0 0 60px;
+  font-size: 42px;
+  line-height: 1;
+  text-align: center;
+}
+
+.daily-object-card h2 {
+  margin: 0 0 2px;
+}
+
+.daily-object-card p {
+  margin-bottom: 0;
+}
+
+.daily-object-summary {
+  color: var(--muted-color);
+}
+
+.daily-object-link {
+  position: absolute;
+  right: 18px;
+  bottom: 16px;
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+  color: var(--muted-color);
+  background: none;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.daily-object-link:hover {
+  color: var(--text-color);
+  background: none;
+}
+
+.daily-object-long {
+  color: var(--muted-color);
+}
+
 .mood-actions,
 .read-tools,
 .radio-links {
@@ -737,6 +799,46 @@ body.pokemon-gameboy input {
 
 .thought-card {
   margin-bottom: 16px;
+}
+
+.internet-drawer-links {
+  display: grid;
+  gap: 12px;
+}
+
+.drawer-link-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.drawer-link-card h3 {
+  margin: 0 0 4px;
+  color: var(--heading-color);
+}
+
+.drawer-link-card p {
+  margin: 0;
+  color: var(--muted-color);
+}
+
+.drawer-link-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.remove-drawer-link {
+  margin-top: 0;
+  color: var(--muted-color);
+  background: none;
+}
+
+.remove-drawer-link:hover {
+  color: var(--text-color);
+  background: none;
 }
 
 .over-limit {
@@ -1056,130 +1158,4 @@ body.zen-mode .zen-title {
 body.zen-mode article img {
   max-width: 100%;
   margin: 20px 0;
-}
-
-@media (max-width: 700px) {
-  body {
-    margin: 24px auto;
-    padding: 0 18px 48px;
-  }
-
-  .desk-sidebar {
-    position: static;
-    width: auto;
-    height: auto;
-    margin: 0 -18px 24px;
-    padding: 14px 18px;
-    border-right: 0;
-    border-bottom: 1px solid var(--line-color);
-  }
-
-  .desk-sidebar a {
-    display: inline-block;
-    margin-right: 8px;
-    margin-bottom: 8px;
-  }
-
-  header {
-    padding-right: 48px;
-    padding-bottom: 24px;
-    margin-bottom: 32px;
-  }
-
-  h1 {
-    font-size: 40px;
-  }
-
-  header p {
-    font-size: 17px;
-  }
-
-  .hero-controls {
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 20px;
-  }
-
-  nav {
-    margin-top: 0;
-  }
-
-  nav a {
-    display: inline-block;
-    margin-right: 14px;
-    margin-bottom: 8px;
-  }
-
-  .mood-panel-compact {
-    width: 100%;
-  }
-
-  .search-section {
-    width: 100%;
-  }
-
-  .theme-toggle {
-    top: 12px;
-    right: 12px;
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
-  }
-
-  .post-heading {
-    padding-left: 68px;
-    min-height: 40px;
-  }
-
-  .post-marker {
-    top: 10px;
-    left: 0;
-    width: 56px;
-  }
-
-  .post-preview-image {
-    width: 48px;
-    height: 48px;
-  }
-
-  .post-heading + p,
-  .post-actions,
-  .post-meta,
-  .mood {
-    margin-left: 68px;
-  }
-
-  .post-actions {
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .post-actions .read-more {
-    margin-left: auto;
-  }
-
-  .scratchpad-options {
-    grid-template-columns: 1fr;
-  }
-
-  .rich-editor {
-    min-height: 200px;
-  }
-
-}
-
-@media (max-width: 380px) {
-  h1 {
-    font-size: 30px;
-  }
-
-  .post-actions {
-    display: block;
-  }
-
-  .post-actions .read-more {
-    display: block;
-    margin-top: 12px;
-    text-align: right;
-  }
 }

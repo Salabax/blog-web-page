@@ -17,8 +17,20 @@
       <a href="coffee-break.html"><span>☕</span>Coffee Break</a>
       <a href="radio.html"><span>📻</span>Groovy Radio</a>
       <a href="collective-thinking.html"><span>💭</span>Collective Thinking</a>
-      <a href="https://theuselessweb.com/" target="_blank" rel="noopener noreferrer"><span>🎲</span>Random Internet</a>
       <a href="scratchpad.html"><span>📝</span>Scratchpad</a>
+    </div>
+    <button class="desk-label" type="button" aria-expanded="true" aria-controls="internet-drawer-section">
+      Internet Drawer
+      <span aria-hidden="true">-</span>
+    </button>
+    <div id="internet-drawer-section" class="desk-section-links">
+      <a href="https://www.window-swap.com/" target="_blank" rel="noopener noreferrer"><span>🪟</span>WindowSwap</a>
+      <a href="https://radio.garden/" target="_blank" rel="noopener noreferrer"><span>🌍</span>Radio Garden</a>
+      <a href="https://apod.nasa.gov/apod/" target="_blank" rel="noopener noreferrer"><span>🚀</span>NASA APOD</a>
+      <a href="https://play.typeracer.com/?universe=jokes" target="_blank" rel="noopener noreferrer"><span>⌨️</span>TypeRacer</a>
+      <a href="https://everynoise.com/" target="_blank" rel="noopener noreferrer"><span>🎧</span>Every Noise at Once</a>
+      <a href="https://theuselessweb.com/" target="_blank" rel="noopener noreferrer"><span>🎲</span>Random Internet</a>
+      <a href="internet-drawer.html"><span>🗂</span>Add to drawer</a>
     </div>
   </aside>
 
@@ -48,6 +60,8 @@
   </header>
 
   <main>
+    <section id="daily-object" class="daily-object-card" aria-live="polite"></section>
+
     <section id="read-something" class="hub-section">
       <h2>Read Something</h2>
       <div class="read-control-row">
@@ -55,11 +69,11 @@
           <button id="saved-filter" type="button" aria-pressed="false">Saved Articles</button>
           <button id="random-post" type="button">Random Post</button>
         </div>
-      <section class="search-section">
-        <label for="post-search">Search posts</label>
-        <input id="post-search" type="search" placeholder="Search">
-        <button id="clear-search" type="button" aria-label="Clear search" hidden>×</button>
-        <p id="post-count"></p>
+        <section class="search-section">
+          <label for="post-search">Search posts</label>
+          <input id="post-search" type="search" placeholder="Search">
+          <button id="clear-search" type="button" aria-label="Clear search" hidden>×</button>
+          <p id="post-count"></p>
         </section>
       </div>
     </section>
