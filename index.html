@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wandering and Building - Online</title>
+  <title>Wandering and Building - Lobby</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,67 +14,35 @@
     <div class="tv-base"></div>
   </div>
 
-  <header class="hero">
+  <header class="hero lobby-hero">
     <h1>Wandering and Building</h1>
-    <p>A small internet room for relaxing, reading, watching quiet visuals, and messing with tiny interactions.</p>
-    <div class="hero-controls">
-      <nav>
-        <a href="#saved-posts">Read</a>
-        <a href="#about">About</a>
-      </nav>
-      <section id="mood-panel" class="mood-panel-compact is-collapsed" aria-label="Mood Panel">
-        <button class="mood-toggle" type="button" aria-expanded="false" aria-controls="mood-options">
-          Mood
-          <span aria-hidden="true">+</span>
-        </button>
-        <div id="mood-options" class="mood-options-panel">
-          <div class="mood-actions">
+    <p>A strange little internet room.</p>
+    <p class="hero-instruction">Choose a door.</p>
+    <section id="mood-panel" class="mood-panel-compact is-collapsed lobby-mood" aria-label="Mood Settings">
+      <button class="mood-toggle" type="button" aria-expanded="false" aria-controls="mood-options">
+        Mood Settings
+        <span aria-hidden="true">+</span>
+      </button>
+      <div id="mood-options" class="mood-options-panel">
+        <div class="mood-actions">
           <button type="button" data-mode="cyberpunk">Cyberpunk</button>
           <button type="button" data-mode="gotham-city">Gotham City</button>
           <button type="button" data-mode="pokemon-gameboy">Pokemon Gameboy</button>
-          </div>
-          <p id="current-mood">Current mood: Cyberpunk</p>
         </div>
-      </section>
-    </div>
-  </header>
-
-  <main>
-    <section id="daily-object" class="daily-object-card" aria-live="polite"></section>
-
-    <section id="read-something" class="hub-section">
-      <h2>Read Something</h2>
-      <div class="read-control-row">
-        <div class="read-tools">
-          <button id="saved-filter" type="button" aria-pressed="false">Saved Articles</button>
-          <button id="random-post" type="button">Random Post</button>
-        </div>
-        <section class="search-section">
-          <label for="post-search">Search posts</label>
-          <input id="post-search" type="search" placeholder="Search">
-          <button id="clear-search" type="button" aria-label="Clear search" hidden>×</button>
-          <p id="post-count"></p>
-        </section>
+        <p id="current-mood">Current mood: Cyberpunk</p>
       </div>
     </section>
-    <section id="saved-posts"></section>
-    <section id="older-saved-posts"></section>
-    <p id="saved-filter-empty" class="empty-posts" hidden>No saved articles yet.</p>
-    <p id="no-search-results" hidden>No posts found.</p>
+  </header>
 
-    <section id="about" class="hub-section">
-      <h2>About this room</h2>
-      <p>This is a static chill hub built with HTML, CSS, and JavaScript. The reading cards still use local browser storage, so no backend or accounts are involved yet.</p>
+  <main class="lobby-main">
+    <section id="collective-thinking-home" class="lobby-notes">
+      <h2>Room Notes</h2>
+      <p>Small scraps pinned in the lobby.</p>
+      <div id="collective-thinking-list" class="thought-list" data-static-only="true"></div>
+      <a class="noticeboard-link" href="collective-thinking.html">Open full noticeboard</a>
     </section>
-
   </main>
 
-  <footer id="contact">
-    <p>A small internet room for relaxing, reading, watching quiet visuals, and messing with tiny interactions.</p>
-    <p>Built with HTML, CSS, and JavaScript. Hosted on GitHub Pages.</p>
-    <h2>Contact</h2>
-    <p>Instagram: <a href="https://www.instagram.com/lensbylego/" target="_blank" rel="noopener noreferrer">@lensbylego</a></p>
-  </footer>
   <script src="script.js"></script>
 </body>
 </html>

@@ -9,8 +9,8 @@
 <body>
   <header>
     <h1>Scratchpad</h1>
-    <p>Private notes and small thoughts start here.</p>
-    <p class="hint">Saved locally in this browser.</p>
+    <p>Private notes for things you find in the room.</p>
+    <p class="hint">Saved locally in this browser. You can only review these notes from this device/browser.</p>
     <nav>
       <a href="index.html">Home</a>
     </nav>
@@ -19,13 +19,14 @@
   <main>
     <section class="hub-section scratchpad-options">
       <a class="scratchpad-card" href="write.html">
-        <h2>Blackbook</h2>
-        <p>Write a private local post in this browser.</p>
+        <h2>Private Notes</h2>
+        <p>Keep notes from rabbit holes, objects, discs, and other things you find here.</p>
       </a>
-      <a class="scratchpad-card" href="thought.html">
-        <h2>One Thought</h2>
-        <p>Post one anonymous thought to Collective Thinking.</p>
-      </a>
+    </section>
+
+    <section class="hub-section">
+      <h2>Notes saved here</h2>
+      <div id="private-notes-list" class="private-notes-list"></div>
     </section>
   </main>
 

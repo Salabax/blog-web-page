@@ -3,7 +3,6 @@ const themeKey = "my-first-blog-theme";
 const savedArticlesKey = "my-first-blog-saved-articles";
 // Legacy key names are kept so existing browser-saved posts, moods, and saved articles do not disappear.
 const thoughtsKey = "wandering-collective-thoughts";
-const thoughtsClearKey = "wandering-collective-thoughts-last-clear";
 const drawerLinksKey = "wandering-internet-drawer-links";
 const blindListeningHistoryKey = "wandering-blind-listening-history";
 const blindDiscoveredAlbumsKey = "wandering-blind-discovered-albums";
@@ -275,7 +274,7 @@ const blindAlbums = [
     youtubeSearchUrl: "https://www.youtube.com/results?search_query=Underpass+Choir+Concrete+Echo"
   }
 ];
-const dailyObjects = [
+const objectDrawerItems = [
   {
     name: "Cassette tape",
     emoji: "📼",
@@ -532,7 +531,7 @@ const starterPosts = [
     title: "Why GitHub Pages Feels Weird",
     createdAt: "2026-06-14T12:00:00.000Z",
     image: "images/second-post-placeholder.svg",
-    bodyHTML: "<p>Free hosting is good. Syncing posts is tomorrow's problem. For now, getting a real link on the internet already feels like a small portal opened.</p>",
+    bodyHTML: "<p>Free hosting is good. Syncing across devices is tomorrow's problem. For now, getting a real link on the internet already feels like a small portal opened.</p>",
     tags: ["notes", "publishing"],
     isStarter: true
   },
@@ -540,9 +539,378 @@ const starterPosts = [
     title: "Local Storage Is Not Magic",
     createdAt: "2026-06-14T15:00:00.000Z",
     image: "images/third-post-placeholder.svg",
-    bodyHTML: "<p>Posts saved in one browser stay in that browser. It is useful for learning, but it also explains why real websites eventually need databases, backends, or publishing workflows.</p>",
+    bodyHTML: "<p>Things saved in one browser stay in that browser. It is useful for a private room, but it also explains why shared websites eventually need databases, backends, or publishing workflows.</p>",
     tags: ["javascript", "learning"],
     isStarter: true
+  }
+];
+const rabbitHoleItems = [
+  // Add more rabbit-hole items here later. Keep them short and weird.
+  {
+    title: "WindowSwap",
+    type: "quiet window",
+    mood: "elsewhere",
+    description: "Look through someone else's window for a minute and remember the internet can still be gentle.",
+    link: "https://www.window-swap.com/"
+  },
+  {
+    title: "NASA Astronomy Picture",
+    type: "space object",
+    mood: "small human",
+    description: "A telescope postcard from the universe. Big sky, tiny browser tab.",
+    link: "https://apod.nasa.gov/apod/"
+  },
+  {
+    title: "Radio Garden",
+    type: "sound globe",
+    mood: "drifting",
+    description: "Spin the world and drop into a radio station somewhere far from your room.",
+    link: "https://radio.garden/"
+  },
+  {
+    title: "Every Noise at Once",
+    type: "music map",
+    mood: "overwhelmed but curious",
+    description: "A huge genre constellation. Click carefully or disappear for an hour.",
+    link: "https://everynoise.com/"
+  },
+  {
+    title: "TypeRacer Jokes",
+    type: "typing toy",
+    mood: "hands awake",
+    description: "Race through dumb jokes with your keyboard. Low stakes, weirdly effective.",
+    link: "https://play.typeracer.com/?universe=jokes"
+  },
+  {
+    title: "The Useless Web",
+    type: "random door",
+    mood: "why not",
+    description: "A button that throws you at a strange website. This is basically internet archaeology.",
+    link: "https://theuselessweb.com/"
+  },
+  {
+    title: "Blind CD Player",
+    type: "room object",
+    mood: "cover first",
+    description: "Judge a demo album by its cover before the room tells you what it is.",
+    link: "blind-listening.html"
+  },
+  {
+    title: "Private Notes",
+    type: "private note",
+    mood: "keep this here",
+    description: "Write down what you found. It stays in this browser, on this machine.",
+    link: "write.html"
+  },
+  {
+    title: "Object Drawer",
+    type: "small collection",
+    mood: "desk museum",
+    description: "A little drawer of strange objects, tiny histories, and useless-but-nice details."
+  },
+  {
+    title: "Coffee Break",
+    type: "pause button",
+    mood: "nothing urgent",
+    description: "A small place inside the room for one thought, one click, and then back to drifting.",
+    link: "coffee-break.html"
+  }
+];
+const roomDestinations = [
+  // Add more internal room destinations here later.
+  {
+    title: "Rabbit Hole Machine",
+    target: "rabbit-hole.html",
+    description: "Let one strange item choose the next direction."
+  },
+  {
+    title: "Object Drawer",
+    target: "object-drawer.html",
+    description: "Open a drawer and inspect one strange object."
+  },
+  {
+    title: "CD Player",
+    target: "blind-listening.html",
+    description: "Try the cover-first demo disc player."
+  },
+  {
+    title: "Movie Shelf",
+    target: "movie-shelf.html",
+    description: "Look at a permanent shelf of film placeholders."
+  },
+  {
+    title: "Hidden Files / Signals",
+    target: "hidden-signals.html",
+    description: "Check the locked files that do not explain themselves yet."
+  },
+  {
+    title: "Scratchpad",
+    target: "scratchpad.html",
+    description: "Write private notes saved only in this browser."
+  },
+  {
+    title: "Coffee Break",
+    target: "coffee-break.html",
+    description: "Take a tiny pause inside the room."
+  },
+  {
+    title: "Groovy Radio",
+    target: "radio.html",
+    description: "Open the sound corner."
+  }
+];
+const movieShelfItems = [
+  // Add permanent movie shelf items here later.
+  {
+    title: "Midnight Test Film",
+    year: "1979",
+    mood: "rain on glass",
+    description: "Placeholder for a strange late-night film that belongs in the room."
+  },
+  {
+    title: "The Apartment Signal",
+    year: "1986",
+    mood: "CRT glow",
+    description: "Placeholder for something quiet, slow, and slightly haunted."
+  },
+  {
+    title: "Static Over the City",
+    year: "1994",
+    mood: "nocturnal",
+    description: "Placeholder for a city-at-night movie shelf entry."
+  },
+  {
+    title: "Second-Hand Planet",
+    year: "2001",
+    mood: "found object",
+    description: "Placeholder for a film discovered like an old disc in a drawer."
+  }
+];
+const hiddenSignalFolders = [
+  // Add more public-archive and curiosity files here later. Keep entries neutral and source-first.
+  {
+    title: "UFO / UAP Files",
+    code: "drawer-01",
+    description: "Public aviation records, official indexes, and sky-report placeholders.",
+    files: [
+      {
+        title: "Project Blue Book Index Card",
+        type: "public archive placeholder",
+        description: "A demo card for an aviation report index. Future entries can link to specific public records or archival scans.",
+        source: "National Archives",
+        sourceUrl: "https://www.archives.gov/research/military/air-force/ufos"
+      },
+      {
+        title: "Unidentified Aerial Report Summary",
+        type: "record summary placeholder",
+        description: "A neutral summary slot for an official public report. No conclusions, just where the record came from and what it contains.",
+        source: "Public record placeholder",
+        sourceUrl: "https://www.archives.gov/research/military/air-force/ufos"
+      },
+      {
+        title: "Sky Log Cross-Reference",
+        type: "index note placeholder",
+        description: "A small reference card for connecting dates, locations, and source collections without making claims about the contents.",
+        source: "Archive index placeholder",
+        sourceUrl: "https://www.archives.gov/"
+      }
+    ]
+  },
+  {
+    title: "CIA Reading Room",
+    code: "drawer-02",
+    description: "Declassified reading-room finds, old reports, and document-card placeholders.",
+    files: [
+      {
+        title: "Reading Room Search Slip",
+        type: "declassified index placeholder",
+        description: "A demo entry for a document found through a public reading room search. Future versions can store exact titles and document links.",
+        source: "CIA Reading Room",
+        sourceUrl: "https://www.cia.gov/readingroom/"
+      },
+      {
+        title: "Cold War Translation Note",
+        type: "document placeholder",
+        description: "A calm little file card for translated reports, memos, or historical context documents from public collections.",
+        source: "CIA Reading Room",
+        sourceUrl: "https://www.cia.gov/readingroom/"
+      },
+      {
+        title: "Declassified Memo Stub",
+        type: "memo placeholder",
+        description: "A template for a future memo card with title, date, release source, and a short plain-language note.",
+        source: "Public declassification archive",
+        sourceUrl: "https://www.cia.gov/readingroom/"
+      }
+    ]
+  },
+  {
+    title: "FBI Vault",
+    code: "drawer-03",
+    description: "Public vault collections, old case files, and record placeholders.",
+    files: [
+      {
+        title: "Vault Collection Cover Sheet",
+        type: "public file placeholder",
+        description: "A demo cover sheet for a public vault collection. This section is for records as documents, not theories.",
+        source: "FBI Vault",
+        sourceUrl: "https://vault.fbi.gov/"
+      },
+      {
+        title: "Released File Note",
+        type: "archive note placeholder",
+        description: "A future slot for explaining what a released file is, where it lives, and why it is interesting as a historical object.",
+        source: "FBI Vault",
+        sourceUrl: "https://vault.fbi.gov/"
+      },
+      {
+        title: "Public Record Locator",
+        type: "index placeholder",
+        description: "A tiny locator card for keeping public file links organized inside the room.",
+        source: "Public vault index",
+        sourceUrl: "https://vault.fbi.gov/"
+      }
+    ]
+  },
+  {
+    title: "Strange Patents",
+    code: "drawer-04",
+    description: "Odd inventions, speculative machines, and patent curiosities.",
+    files: [
+      {
+        title: "Mechanical Hat Diagram",
+        type: "patent placeholder",
+        description: "A demo patent card for a strange object with a drawing, date, inventor, and one-sentence explanation later.",
+        source: "Google Patents",
+        sourceUrl: "https://patents.google.com/"
+      },
+      {
+        title: "Pocket Machine Filing",
+        type: "patent index placeholder",
+        description: "A future entry for an invention that feels like it belongs in the Object Drawer too.",
+        source: "Patent archive placeholder",
+        sourceUrl: "https://patents.google.com/"
+      },
+      {
+        title: "Unusual Apparatus Sketch",
+        type: "drawing placeholder",
+        description: "A placeholder for weird-but-real patent drawings, treated as design curiosities rather than claims.",
+        source: "Public patent search",
+        sourceUrl: "https://patents.google.com/"
+      }
+    ]
+  },
+  {
+    title: "Court Archives",
+    code: "drawer-05",
+    description: "Public legal-history records, court documents, and archive notes.",
+    files: [
+      {
+        title: "Public Docket Card",
+        type: "court record placeholder",
+        description: "A demo slot for a public legal record with basic context and a link to the original source.",
+        source: "CourtListener",
+        sourceUrl: "https://www.courtlistener.com/"
+      },
+      {
+        title: "Old Hearing Note",
+        type: "archive note placeholder",
+        description: "A quiet card for legal-history oddities, kept factual and sourced.",
+        source: "Public court archive placeholder",
+        sourceUrl: "https://www.courtlistener.com/"
+      },
+      {
+        title: "Document Room Receipt",
+        type: "record placeholder",
+        description: "A template for adding future public court documents without turning the room into a news feed.",
+        source: "Public records placeholder",
+        sourceUrl: "https://www.courtlistener.com/"
+      }
+    ]
+  },
+  {
+    title: "Number Stations",
+    code: "drawer-06",
+    description: "Radio logs, signal references, and shortwave curiosities.",
+    files: [
+      {
+        title: "Shortwave Log Card",
+        type: "radio log placeholder",
+        description: "A demo card for a shortwave signal log. Future entries can include date, station nickname, and a source link.",
+        source: "Priyom",
+        sourceUrl: "https://priyom.org/"
+      },
+      {
+        title: "Numbers Broadcast Note",
+        type: "signal note placeholder",
+        description: "A neutral note about a public signal record or archive page, without guessing at hidden meanings.",
+        source: "Public radio archive placeholder",
+        sourceUrl: "https://priyom.org/"
+      },
+      {
+        title: "Interval Signal Reference",
+        type: "audio reference placeholder",
+        description: "A future place for station identifiers, recordings, and context from radio-history sources.",
+        source: "Shortwave archive placeholder",
+        sourceUrl: "https://priyom.org/"
+      }
+    ]
+  },
+  {
+    title: "Lost Internet",
+    code: "drawer-07",
+    description: "Old webpages, web ruins, archived pages, and strange corners of internet history.",
+    files: [
+      {
+        title: "Archived Homepage Snapshot",
+        type: "web archive placeholder",
+        description: "A demo card for an old website snapshot. Future entries can link to archived pages and explain why they feel interesting.",
+        source: "Internet Archive",
+        sourceUrl: "https://web.archive.org/"
+      },
+      {
+        title: "Dead Link Specimen",
+        type: "internet history placeholder",
+        description: "A small file for old links, broken pages, and places that only survive through cached copies.",
+        source: "Web archive placeholder",
+        sourceUrl: "https://web.archive.org/"
+      },
+      {
+        title: "Old Web Directory Note",
+        type: "directory placeholder",
+        description: "A future card for personal sites, handmade pages, and tiny internet museums.",
+        source: "Internet Archive",
+        sourceUrl: "https://archive.org/"
+      }
+    ]
+  },
+  {
+    title: "Miscellaneous Curiosities",
+    code: "drawer-08",
+    description: "Everything that belongs in the cabinet but refuses a clean label.",
+    files: [
+      {
+        title: "Library Object Record",
+        type: "collection placeholder",
+        description: "A demo entry for a strange public collection object, catalog item, or forgotten record.",
+        source: "Library of Congress",
+        sourceUrl: "https://www.loc.gov/"
+      },
+      {
+        title: "Museum Catalog Slip",
+        type: "catalog placeholder",
+        description: "A future place for odd catalog records, old photographs, maps, and small historical surprises.",
+        source: "Public collection placeholder",
+        sourceUrl: "https://www.loc.gov/"
+      },
+      {
+        title: "Unsorted Cabinet Card",
+        type: "curiosity placeholder",
+        description: "A catch-all file for public curiosities that are better discovered than categorized.",
+        source: "Public archive placeholder",
+        sourceUrl: "https://archive.org/"
+      }
+    ]
   }
 ];
 const starterThoughts = [
@@ -650,38 +1018,6 @@ function getDrawerLinks() {
 
 function saveDrawerLinks(links) {
   return writeLocalJSON(drawerLinksKey, links);
-}
-
-function getDailyObject() {
-  const today = new Date();
-  const dateKey = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
-  let hash = 0;
-
-  for (let i = 0; i < dateKey.length; i++) {
-    hash += dateKey.charCodeAt(i);
-  }
-
-  return dailyObjects[hash % dailyObjects.length];
-}
-
-function getThisMondayNoon() {
-  const now = new Date();
-  const mondayNoon = new Date(now);
-  const daysSinceMonday = (now.getDay() + 6) % 7;
-  mondayNoon.setDate(now.getDate() - daysSinceMonday);
-  mondayNoon.setHours(12, 0, 0, 0);
-  return mondayNoon;
-}
-
-function clearThoughtsAfterMondayNoon() {
-  const now = new Date();
-  const mondayNoon = getThisMondayNoon();
-  const lastClear = readLocalString(thoughtsClearKey, "");
-
-  if (now >= mondayNoon && lastClear !== mondayNoon.toISOString()) {
-    saveThoughts([]);
-    writeLocalString(thoughtsClearKey, mondayNoon.toISOString());
-  }
 }
 
 function getPostId(post) {
@@ -844,7 +1180,7 @@ function createPreview(post, index) {
     <p>${escapeHTML(previewText)}${plainBody.length > 120 ? "..." : ""}</p>
     <div class="post-actions">
       ${editControls}
-      <a class="read-more" href="${postLink}">Read more...</a>
+      <a class="read-more" href="${postLink}">Open item...</a>
     </div>
   `;
   article.addEventListener("click", (event) => {
@@ -909,7 +1245,7 @@ function showSavedPosts() {
     .map((post, index) => ({ post, index }))
     .filter((item) => !isNewPost(item.post));
 
-  savedPostsSection.innerHTML = "<h2>New posts</h2>";
+  savedPostsSection.innerHTML = "<h2>Rabbit holes</h2>";
   if (newPosts.length > 0) {
     newPosts.forEach((item) => {
       savedPostsSection.appendChild(createPreview(item.post, item.index));
@@ -917,7 +1253,7 @@ function showSavedPosts() {
   }
 
   if (olderSavedPostsSection && olderPosts.length > 0) {
-    olderSavedPostsSection.innerHTML = "<h2>Older saved posts</h2>";
+    olderSavedPostsSection.innerHTML = "<h2>Archive shelf</h2>";
     olderPosts.forEach((item) => {
       olderSavedPostsSection.appendChild(createPreview(item.post, item.index));
     });
@@ -932,6 +1268,43 @@ function showSavedPosts() {
   document.querySelectorAll(".save-post").forEach((button) => {
     button.addEventListener("click", () => {
       toggleSavedArticle(button.dataset.postId);
+    });
+  });
+}
+
+function showPrivateNotes() {
+  const notesList = document.querySelector("#private-notes-list");
+  if (!notesList) {
+    return;
+  }
+
+  const notes = getPosts();
+  if (notes.length === 0) {
+    notesList.innerHTML = `<p class="empty-posts">No private notes yet.</p>`;
+    return;
+  }
+
+  notesList.innerHTML = notes.map((note, index) => {
+    const plainBody = stripHTML(getPostBodyHTML(note));
+    const preview = plainBody.slice(0, 140);
+
+    return `
+      <article class="scratchpad-note-card">
+        <time datetime="${note.createdAt}">${formatDate(note.createdAt)}</time>
+        <h3>${escapeHTML(note.title)}</h3>
+        <p>${escapeHTML(preview)}${plainBody.length > 140 ? "..." : ""}</p>
+        <div class="post-actions">
+          <a class="edit-post" href="write.html?id=${index}">Edit</a>
+          <button class="delete-post" type="button" data-index="${index}">Delete</button>
+          <a class="read-more" href="post.html?id=${index}">Open note...</a>
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  notesList.querySelectorAll(".delete-post").forEach((button) => {
+    button.addEventListener("click", () => {
+      deletePost(Number(button.dataset.index));
     });
   });
 }
@@ -973,7 +1346,7 @@ function setupPostForm() {
     titleInput.value = postToEdit.title;
     bodyInput.innerHTML = getPostBodyHTML(postToEdit);
     showImagePreview(selectedImage);
-    saveButton.textContent = "Update post";
+    saveButton.textContent = "Update note";
   } else {
     titleInput.value = "";
     bodyInput.innerHTML = "";
@@ -1036,7 +1409,7 @@ function setupPostForm() {
 
     try {
       savePosts(posts);
-      window.location.href = "index.html";
+      window.location.href = "scratchpad.html";
     } catch (error) {
       hasUnsavedChanges = true;
       alert("That post is too large to save in the browser. Try using a smaller image.");
@@ -1095,7 +1468,10 @@ function showCollectiveThoughts() {
     return;
   }
 
-  const thoughts = [...getThoughts(), ...starterThoughts];
+  const isStaticPreview = thoughtList.dataset.staticOnly === "true";
+  const thoughts = isStaticPreview
+    ? starterThoughts.slice(0, 3)
+    : [...getThoughts(), ...starterThoughts];
 
   if (thoughts.length === 0) {
     thoughtList.innerHTML = `<p class="empty-posts">No thoughts yet.</p>`;
@@ -1106,7 +1482,7 @@ function showCollectiveThoughts() {
     <article class="thought-card">
       <time datetime="${thought.createdAt}">${formatDate(thought.createdAt)}</time>
       <p>${escapeHTML(thought.body)}</p>
-      ${thought.isStarter ? `<p class="hint">example thought</p>` : ""}
+      ${thought.isStarter ? `<p class="hint">room note</p>` : ""}
     </article>
   `).join("");
 }
@@ -1296,33 +1672,181 @@ function setupBlindListening() {
   renderAlbum();
 }
 
-function showDailyObject() {
-  const dailyObjectCard = document.querySelector("#daily-object");
-  if (!dailyObjectCard) {
+function setupRabbitHoleMachine() {
+  const openButton = document.querySelector("#open-rabbit-hole");
+  const resultCard = document.querySelector("#rabbit-hole-result");
+  if (!openButton || !resultCard) {
     return;
   }
 
-  const object = getDailyObject();
-  dailyObjectCard.innerHTML = `
-    <div class="daily-object-kicker">Today's Object</div>
-    <div class="daily-object-main">
-      <span class="daily-object-emoji" aria-hidden="true">${object.emoji}</span>
-      <div>
-        <h2>${escapeHTML(object.name)}</h2>
-        <p class="daily-object-summary">Invented in ${escapeHTML(object.year)}. ${escapeHTML(object.short)}</p>
-        <p class="daily-object-long" hidden>${escapeHTML(object.long)}</p>
-      </div>
+  openButton.addEventListener("click", () => {
+    const item = rabbitHoleItems[Math.floor(Math.random() * rabbitHoleItems.length)];
+    resultCard.hidden = false;
+    resultCard.innerHTML = `
+      <div class="daily-object-kicker">${escapeHTML(item.type)}</div>
+      <h3>${escapeHTML(item.title)}</h3>
+      <p class="mood">Mood: ${escapeHTML(item.mood)}</p>
+      <p>${escapeHTML(item.description)}</p>
+      ${item.link ? `<a class="read-more" href="${escapeHTML(item.link)}" ${item.link.startsWith("http") ? `target="_blank" rel="noopener noreferrer"` : ""}>Open item...</a>` : ""}
+    `;
+  });
+}
+
+function setupRoomExplorer() {
+  const exploreButton = document.querySelector("#explore-room-button");
+  const sidebarExplore = document.querySelector("#control-tower-explore");
+  const result = document.querySelector("#explore-room-result");
+
+  function openRandomRoom(event) {
+    if (event) {
+      event.preventDefault();
+    }
+
+    const destination = roomDestinations[Math.floor(Math.random() * roomDestinations.length)];
+    document.body.classList.add("room-is-opening");
+    window.setTimeout(() => {
+      window.location.href = destination.target;
+    }, 140);
+  }
+
+  if (sidebarExplore) {
+    sidebarExplore.addEventListener("click", openRandomRoom);
+  }
+
+  if (!exploreButton) {
+    return;
+  }
+
+  exploreButton.addEventListener("click", (event) => {
+    const destination = roomDestinations[Math.floor(Math.random() * roomDestinations.length)];
+    if (!result) {
+      openRandomRoom(event);
+      return;
+    }
+
+    result.innerHTML = `
+      <article class="shell-card">
+        <div class="daily-object-kicker">room door</div>
+        <h3>${escapeHTML(destination.title)}</h3>
+        <p>${escapeHTML(destination.description)}</p>
+        <a class="read-more" href="${escapeHTML(destination.target)}">Go there...</a>
+      </article>
+    `;
+  });
+}
+
+function showObjectDrawer() {
+  const objectDrawer = document.querySelector("#object-drawer");
+  if (!objectDrawer) {
+    return;
+  }
+
+  const objects = objectDrawerItems.slice(0, 5);
+  objectDrawer.innerHTML = `
+    <div class="daily-object-kicker">Object Drawer</div>
+    <h2>Strange Objects</h2>
+    <p class="daily-object-summary">A permanent drawer of small things. Placeholder objects for now.</p>
+    <div class="shell-grid">
+      ${objects.map((object) => `
+        <article class="shell-card object-drawer-item">
+          <span class="daily-object-emoji" aria-hidden="true">${object.emoji}</span>
+          <h3>${escapeHTML(object.name)}</h3>
+          <p>Invented in ${escapeHTML(object.year)}. ${escapeHTML(object.short)}</p>
+          <p class="daily-object-long" hidden>${escapeHTML(object.long)}</p>
+          <button class="object-drawer-toggle daily-object-link" type="button">Open item...</button>
+        </article>
+      `).join("")}
     </div>
-    <button id="open-daily-object" class="daily-object-link" type="button">Open item...</button>
   `;
 
-  const openButton = document.querySelector("#open-daily-object");
-  const longText = dailyObjectCard.querySelector(".daily-object-long");
+  objectDrawer.querySelectorAll(".object-drawer-toggle").forEach((button) => {
+    const longText = button.parentElement.querySelector(".daily-object-long");
 
-  openButton.addEventListener("click", () => {
-    const isHidden = longText.hidden;
-    longText.hidden = !isHidden;
-    openButton.textContent = isHidden ? "Close item..." : "Open item...";
+    button.addEventListener("click", () => {
+      const isHidden = longText.hidden;
+      longText.hidden = !isHidden;
+      button.textContent = isHidden ? "Close item..." : "Open item...";
+    });
+  });
+}
+
+function showMovieShelf() {
+  const movieShelf = document.querySelector("#movie-shelf-list");
+  if (!movieShelf) {
+    return;
+  }
+
+  movieShelf.innerHTML = movieShelfItems.map((movie) => `
+    <article class="shell-card">
+      <div class="daily-object-kicker">${escapeHTML(movie.mood)}</div>
+      <h3>${escapeHTML(movie.title)}</h3>
+      <p>${escapeHTML(movie.year)}</p>
+      <p>${escapeHTML(movie.description)}</p>
+    </article>
+  `).join("");
+}
+
+function showHiddenSignals() {
+  const signalList = document.querySelector("#hidden-signals-list");
+  const signalResult = document.querySelector("#hidden-signal-result");
+  if (!signalList) {
+    return;
+  }
+
+  signalList.innerHTML = hiddenSignalFolders.map((folder, index) => `
+    <article class="archive-folder">
+      <div class="archive-folder-tab">${escapeHTML(folder.code)}</div>
+      <h3>${escapeHTML(folder.title)}</h3>
+      <p>${escapeHTML(folder.description)}</p>
+      <button class="hidden-signal-button" type="button" data-index="${index}">Open folder</button>
+    </article>
+  `).join("");
+
+  signalList.querySelectorAll(".hidden-signal-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const folder = hiddenSignalFolders[Number(button.dataset.index)];
+      if (!signalResult || !folder) {
+        return;
+      }
+
+      let fileIndex = Math.floor(Math.random() * folder.files.length);
+      const lastFileIndex = Number(button.dataset.lastFileIndex);
+      if (folder.files.length > 1 && fileIndex === lastFileIndex) {
+        fileIndex = (fileIndex + 1) % folder.files.length;
+      }
+
+      button.dataset.lastFileIndex = String(fileIndex);
+      const file = folder.files[fileIndex];
+      if (!file) {
+        signalResult.hidden = false;
+        signalResult.innerHTML = `
+          <div class="archive-file-stamp">empty drawer</div>
+          <h3>${escapeHTML(folder.title)}</h3>
+          <p class="hint">No files have been added to this folder yet.</p>
+        `;
+        return;
+      }
+
+      signalResult.hidden = false;
+      signalResult.innerHTML = `
+        <div class="archive-file-stamp">released copy</div>
+        <div class="daily-object-kicker">${escapeHTML(folder.title)}</div>
+        <h2>${escapeHTML(file.title)}</h2>
+        <dl class="archive-file-meta">
+          <div>
+            <dt>Type</dt>
+            <dd>${escapeHTML(file.type)}</dd>
+          </div>
+          <div>
+            <dt>Source</dt>
+            <dd>${escapeHTML(file.source)}</dd>
+          </div>
+        </dl>
+        <p>${escapeHTML(file.description)}</p>
+        <a class="button-link archive-original-link" href="${escapeHTML(file.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open Original</a>
+      `;
+      signalResult.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
   });
 }
 
@@ -1365,7 +1889,7 @@ function updatePostCount() {
   const articles = document.querySelectorAll("article");
   const visibleArticles = Array.from(articles).filter((article) => !article.hidden);
   const count = visibleArticles.length;
-  postCount.textContent = `${count} ${count === 1 ? "post" : "posts"}`;
+  postCount.textContent = `${count} ${count === 1 ? "item" : "items"}`;
 }
 
 function setupSearch() {
@@ -1423,7 +1947,7 @@ function setupRandomPost() {
   randomPostButton.addEventListener("click", () => {
     const posts = Array.from(document.querySelectorAll(".post-card")).filter((post) => !post.hidden);
     if (posts.length === 0) {
-      randomPostButton.textContent = "No posts yet";
+      randomPostButton.textContent = "No items yet";
       return;
     }
 
@@ -1453,7 +1977,7 @@ function setupControlPanel() {
       });
 
       savedFilterButton.setAttribute("aria-pressed", String(showingSavedOnly));
-      savedFilterButton.textContent = showingSavedOnly ? "All Articles" : "Saved Articles";
+      savedFilterButton.textContent = showingSavedOnly ? "All Items" : "Saved Items";
       if (savedFilterEmpty) {
         const hasVisibleCards = Array.from(document.querySelectorAll(".post-card")).some((card) => !card.hidden);
         savedFilterEmpty.hidden = !showingSavedOnly || hasVisibleCards;
@@ -1485,7 +2009,7 @@ function setupRandomArticle() {
   articleButton.addEventListener("click", () => {
     const posts = getDisplayPosts();
     if (posts.length === 0) {
-      articleButton.textContent = "No articles yet";
+      articleButton.textContent = "No items yet";
       return;
     }
 
@@ -1519,10 +2043,14 @@ function getControlTowerHTML() {
         <span aria-hidden="true">-</span>
       </button>
       <div id="desk-section" class="desk-section-links">
+        <a href="rabbit-hole.html"><span>🕳</span>Rabbit Hole</a>
+        <a href="object-drawer.html"><span>🗄</span>Object Drawer</a>
         <a href="coffee-break.html"><span>☕</span>Coffee Break</a>
         <a href="radio.html"><span>📻</span>Groovy Radio</a>
-        <a href="blind-listening.html"><span>💿</span>Blind Listening</a>
+        <a href="blind-listening.html"><span>💿</span>CD Player</a>
         <a href="collective-thinking.html"><span>💭</span>Collective Thinking</a>
+        <a href="movie-shelf.html"><span>🎬</span>Movie Shelf</a>
+        <a href="hidden-signals.html"><span>📁</span>Hidden Signals</a>
         <a href="scratchpad.html"><span>📝</span>Scratchpad</a>
       </div>
       <button class="desk-label" type="button" aria-expanded="true" aria-controls="internet-drawer-section">
@@ -1715,15 +2243,19 @@ function setupTheme() {
 setupSiteScale();
 setupControlTowerShell();
 setupTheme();
-clearThoughtsAfterMondayNoon();
 showSavedPosts();
+showPrivateNotes();
 setupPostForm();
 setupThoughtForm();
 showCollectiveThoughts();
 setupInternetDrawerForm();
 renderInternetDrawer();
 setupBlindListening();
-showDailyObject();
+setupRabbitHoleMachine();
+setupRoomExplorer();
+showObjectDrawer();
+showMovieShelf();
+showHiddenSignals();
 showFullSavedPost();
 setupSearch();
 setupRandomPost();
