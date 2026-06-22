@@ -17,12 +17,21 @@
   </header>
 
   <main>
-    <section id="rabbit-hole-room" class="hub-section rabbit-hole-room">
-      <div class="room-action-row">
-        <button id="open-rabbit-hole" type="button">Open Rabbit Hole</button>
-        <button id="explore-room-button" type="button">Explore Room</button>
+    <section id="rabbit-hole-room" class="rabbit-hole-room">
+      <div class="rabbit-machine">
+        <div class="rabbit-machine-screen" aria-hidden="true">
+          <span class="rabbit-machine-scanline"></span>
+          <span class="rabbit-machine-status">SIGNAL READY</span>
+        </div>
+        <div class="rabbit-machine-copy">
+          <p>Pull the machine and let it choose the next wrong turn.</p>
+        </div>
+        <div class="rabbit-machine-actions">
+          <button id="open-rabbit-hole" class="rabbit-primary-button" type="button">🌍 Open an Internet Rabbit Hole</button>
+          <button id="explore-room-button" type="button">🚪 Explore the Room</button>
+          <button id="surprise-me-button" type="button">🎲 Surprise Me</button>
+        </div>
       </div>
-      <article id="rabbit-hole-result" class="rabbit-hole-card" hidden></article>
     </section>
   </main>
 

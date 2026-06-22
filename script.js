@@ -545,7 +545,7 @@ const starterPosts = [
   }
 ];
 const rabbitHoleItems = [
-  // Add more rabbit-hole items here later. Keep them short and weird.
+  // Add more curated external rabbit holes here later. These should feel discovered, not recommended.
   {
     title: "WindowSwap",
     type: "quiet window",
@@ -589,35 +589,36 @@ const rabbitHoleItems = [
     link: "https://theuselessweb.com/"
   },
   {
-    title: "Blind CD Player",
-    type: "room object",
-    mood: "cover first",
-    description: "Judge a demo album by its cover before the room tells you what it is.",
-    link: "blind-listening.html"
+    title: "Internet Archive",
+    type: "old web shelf",
+    mood: "lost and found",
+    description: "A giant attic of books, pages, software, audio, video, and internet ghosts.",
+    link: "https://archive.org/"
   },
   {
-    title: "Private Notes",
-    type: "private note",
-    mood: "keep this here",
-    description: "Write down what you found. It stays in this browser, on this machine.",
-    link: "write.html"
+    title: "Atlas Obscura",
+    type: "strange place index",
+    mood: "map with secrets",
+    description: "A doorway into odd places, small museums, local myths, and weird geography.",
+    link: "https://www.atlasobscura.com/"
   },
   {
-    title: "Object Drawer",
-    type: "small collection",
-    mood: "desk museum",
-    description: "A little drawer of strange objects, tiny histories, and useless-but-nice details."
+    title: "Public Domain Review",
+    type: "beautiful archive",
+    mood: "dusty wonder",
+    description: "Old images, strange books, forgotten ideas, and public-domain rabbit holes.",
+    link: "https://publicdomainreview.org/"
   },
   {
-    title: "Coffee Break",
-    type: "pause button",
-    mood: "nothing urgent",
-    description: "A small place inside the room for one thought, one click, and then back to drifting.",
-    link: "coffee-break.html"
+    title: "Library of Congress Digital Collections",
+    type: "public archive",
+    mood: "paper corridors",
+    description: "Maps, photographs, recordings, newspapers, and old documents from a very large cabinet.",
+    link: "https://www.loc.gov/collections/"
   }
 ];
 const roomDestinations = [
-  // Add more internal room destinations here later.
+  // Add more internal room destinations here later. Each room has the same chance of being chosen.
   {
     title: "Rabbit Hole Machine",
     target: "rabbit-hole.html",
@@ -639,7 +640,7 @@ const roomDestinations = [
     description: "Look at a permanent shelf of film placeholders."
   },
   {
-    title: "Hidden Files / Signals",
+    title: "Hidden Signals",
     target: "hidden-signals.html",
     description: "Check the locked files that do not explain themselves yet."
   },
@@ -658,6 +659,21 @@ const roomDestinations = [
     target: "radio.html",
     description: "Open the sound corner."
   }
+];
+const roomTransitionMessages = [
+  "Opening door...",
+  "Wandering...",
+  "Looking around...",
+  "Turning the corner...",
+  "Following a strange sound...",
+  "Entering another room..."
+];
+const rabbitHoleTransitionMessages = [
+  "Opening...",
+  "Following the trail...",
+  "Digging deeper...",
+  "One more click...",
+  "You probably shouldn't..."
 ];
 const movieShelfItems = [
   // Add permanent movie shelf items here later.
@@ -1672,66 +1688,125 @@ function setupBlindListening() {
   renderAlbum();
 }
 
-function setupRabbitHoleMachine() {
-  const openButton = document.querySelector("#open-rabbit-hole");
-  const resultCard = document.querySelector("#rabbit-hole-result");
-  if (!openButton || !resultCard) {
-    return;
+let isExploring = false;
+
+function getRandomItem(items) {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
+function showRoomTransition(destination, messages = roomTransitionMessages) {
+  let overlay = document.querySelector("#room-transition-overlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "room-transition-overlay";
+    overlay.className = "room-transition-overlay";
+    overlay.setAttribute("aria-live", "polite");
+    document.body.append(overlay);
   }
 
-  openButton.addEventListener("click", () => {
-    const item = rabbitHoleItems[Math.floor(Math.random() * rabbitHoleItems.length)];
-    resultCard.hidden = false;
-    resultCard.innerHTML = `
-      <div class="daily-object-kicker">${escapeHTML(item.type)}</div>
-      <h3>${escapeHTML(item.title)}</h3>
-      <p class="mood">Mood: ${escapeHTML(item.mood)}</p>
-      <p>${escapeHTML(item.description)}</p>
-      ${item.link ? `<a class="read-more" href="${escapeHTML(item.link)}" ${item.link.startsWith("http") ? `target="_blank" rel="noopener noreferrer"` : ""}>Open item...</a>` : ""}
-    `;
+  overlay.innerHTML = `
+    <div class="room-transition-card">
+      <span class="room-transition-light" aria-hidden="true"></span>
+      <p>${escapeHTML(getRandomItem(messages))}</p>
+      <small>${escapeHTML(destination.title)}</small>
+    </div>
+  `;
+
+  window.requestAnimationFrame(() => {
+    overlay.classList.add("is-visible");
   });
 }
 
-function setupRoomExplorer() {
-  const exploreButton = document.querySelector("#explore-room-button");
-  const sidebarExplore = document.querySelector("#control-tower-explore");
-  const result = document.querySelector("#explore-room-result");
-
-  function openRandomRoom(event) {
-    if (event) {
-      event.preventDefault();
-    }
-
-    const destination = roomDestinations[Math.floor(Math.random() * roomDestinations.length)];
-    document.body.classList.add("room-is-opening");
-    window.setTimeout(() => {
-      window.location.href = destination.target;
-    }, 140);
+function travelToDestination(destination, messages = roomTransitionMessages) {
+  if (isExploring) {
+    return;
   }
+
+  isExploring = true;
+  document.body.classList.add("room-is-opening");
+  showRoomTransition(destination, messages);
+
+  window.setTimeout(() => {
+    window.location.href = destination.target;
+  }, 780);
+}
+
+function openRandomInternetRabbitHole() {
+  const item = getRandomItem(rabbitHoleItems);
+  travelToDestination({
+    title: item.title,
+    target: item.link
+  }, rabbitHoleTransitionMessages);
+}
+
+function openRandomRoom(event) {
+  if (event) {
+    event.preventDefault();
+  }
+
+  travelToDestination(getRandomItem(roomDestinations), roomTransitionMessages);
+}
+
+function setupRabbitHoleMachine() {
+  const openButton = document.querySelector("#open-rabbit-hole");
+  const surpriseButton = document.querySelector("#surprise-me-button");
+
+  if (openButton) {
+    openButton.addEventListener("click", openRandomInternetRabbitHole);
+  }
+
+  if (surpriseButton) {
+    surpriseButton.addEventListener("click", () => {
+      const surpriseDestinations = [
+        {
+          title: "Internet Rabbit Hole",
+          run: openRandomInternetRabbitHole
+        },
+        {
+          title: "Explore the Room",
+          run: () => travelToDestination(getRandomItem(roomDestinations), rabbitHoleTransitionMessages)
+        },
+        {
+          title: "Hidden Signals",
+          run: () => travelToDestination({ title: "Hidden Signals", target: "hidden-signals.html" }, rabbitHoleTransitionMessages)
+        },
+        {
+          title: "CD Player",
+          run: () => travelToDestination({ title: "CD Player", target: "blind-listening.html" }, rabbitHoleTransitionMessages)
+        },
+        {
+          title: "Object Drawer",
+          run: () => travelToDestination({ title: "Object Drawer", target: "object-drawer.html" }, rabbitHoleTransitionMessages)
+        },
+        {
+          title: "Movie Shelf",
+          run: () => travelToDestination({ title: "Movie Shelf", target: "movie-shelf.html" }, rabbitHoleTransitionMessages)
+        },
+        {
+          title: "Coffee Break",
+          run: () => travelToDestination({ title: "Coffee Break", target: "coffee-break.html" }, rabbitHoleTransitionMessages)
+        },
+        {
+          title: "Groovy Radio",
+          run: () => travelToDestination({ title: "Groovy Radio", target: "radio.html" }, rabbitHoleTransitionMessages)
+        }
+      ];
+
+      getRandomItem(surpriseDestinations).run();
+    });
+  }
+}
+
+function setupRoomExplorer() {
+  const exploreButtons = document.querySelectorAll("#explore-room-button, [data-explore-room]");
+  const sidebarExplore = document.querySelector("#control-tower-explore");
 
   if (sidebarExplore) {
     sidebarExplore.addEventListener("click", openRandomRoom);
   }
 
-  if (!exploreButton) {
-    return;
-  }
-
-  exploreButton.addEventListener("click", (event) => {
-    const destination = roomDestinations[Math.floor(Math.random() * roomDestinations.length)];
-    if (!result) {
-      openRandomRoom(event);
-      return;
-    }
-
-    result.innerHTML = `
-      <article class="shell-card">
-        <div class="daily-object-kicker">room door</div>
-        <h3>${escapeHTML(destination.title)}</h3>
-        <p>${escapeHTML(destination.description)}</p>
-        <a class="read-more" href="${escapeHTML(destination.target)}">Go there...</a>
-      </article>
-    `;
+  exploreButtons.forEach((button) => {
+    button.addEventListener("click", openRandomRoom);
   });
 }
 

@@ -146,6 +146,71 @@ body.room-is-opening {
   opacity: 0.72;
 }
 
+.room-transition-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--heading-color) 10%, transparent), transparent 18rem),
+    color-mix(in srgb, var(--page-background) 84%, black);
+  z-index: 100;
+  transition: opacity 220ms ease;
+}
+
+.room-transition-overlay.is-visible {
+  opacity: 1;
+}
+
+.room-transition-card {
+  min-width: 260px;
+  padding: 28px;
+  border: 1px solid color-mix(in srgb, var(--line-color) 72%, transparent);
+  border-radius: 8px;
+  color: var(--text-color);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--card-background) 92%, transparent) 0,
+      color-mix(in srgb, var(--card-background) 92%, transparent) 6px,
+      color-mix(in srgb, var(--line-color) 18%, transparent) 7px
+    );
+  box-shadow:
+    0 0 34px color-mix(in srgb, var(--heading-color) 18%, transparent),
+    inset 0 0 28px rgba(0, 0, 0, 0.28);
+  text-align: center;
+}
+
+.room-transition-card p {
+  margin: 14px 0 4px;
+  color: var(--heading-color);
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.room-transition-card small {
+  color: var(--muted-color);
+}
+
+.room-transition-light {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background-color: var(--heading-color);
+  box-shadow: 0 0 22px var(--heading-color);
+  animation: room-transition-pulse 720ms ease-in-out infinite alternate;
+}
+
+@keyframes room-transition-pulse {
+  to {
+    opacity: 0.42;
+    transform: scale(0.82);
+  }
+}
+
 body::before,
 body::after {
   content: "";
@@ -232,7 +297,9 @@ footer {
   .room-window,
   .room-lamp,
   .room-crt,
-  .room-light {
+  .room-light,
+  .rabbit-machine-screen::before,
+  .rabbit-machine-scanline {
     animation: none;
   }
 
@@ -1319,8 +1386,114 @@ main > .hub-section:first-child {
 }
 
 .rabbit-hole-room {
+  display: grid;
+  min-height: 420px;
+  place-items: center;
   padding-top: 0;
   border-top: 0;
+}
+
+.rabbit-machine {
+  width: min(100%, 620px);
+  padding: 28px;
+  border: 1px solid color-mix(in srgb, var(--line-color) 80%, transparent);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--card-background) 88%, var(--muted-color) 6%), var(--card-background)),
+    radial-gradient(circle at 50% 0, color-mix(in srgb, var(--heading-color) 14%, transparent), transparent 18rem);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.34),
+    inset 0 0 36px rgba(0, 0, 0, 0.22),
+    0 0 40px color-mix(in srgb, var(--heading-color) 12%, transparent);
+}
+
+.rabbit-machine-screen {
+  position: relative;
+  display: grid;
+  height: 220px;
+  place-items: center;
+  overflow: hidden;
+  border: 12px solid color-mix(in srgb, var(--field-background) 80%, black);
+  border-radius: 28px;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.08) 0,
+      rgba(255, 255, 255, 0.08) 1px,
+      transparent 1px,
+      transparent 7px
+    ),
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--heading-color) 22%, transparent), transparent 42%),
+    #050509;
+  box-shadow:
+    inset 0 0 44px rgba(0, 0, 0, 0.9),
+    0 0 28px color-mix(in srgb, var(--heading-color) 16%, transparent);
+}
+
+.rabbit-machine-screen::before {
+  content: "";
+  width: 82px;
+  height: 82px;
+  border: 2px solid var(--heading-color);
+  border-radius: 50%;
+  box-shadow:
+    0 0 18px var(--heading-color),
+    inset 0 0 18px color-mix(in srgb, var(--heading-color) 45%, transparent);
+  animation: rabbit-machine-dial 5s ease-in-out infinite alternate;
+}
+
+.rabbit-machine-scanline {
+  position: absolute;
+  inset: -40% 0 auto;
+  height: 40%;
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--heading-color) 12%, transparent), transparent);
+  animation: rabbit-machine-scan 4.8s linear infinite;
+}
+
+.rabbit-machine-status {
+  position: absolute;
+  bottom: 18px;
+  left: 20px;
+  color: var(--muted-color);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.18em;
+}
+
+.rabbit-machine-copy {
+  margin: 22px auto 0;
+  max-width: 420px;
+  color: var(--muted-color);
+  text-align: center;
+}
+
+.rabbit-machine-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.rabbit-machine-actions button {
+  margin-top: 0;
+}
+
+.rabbit-machine-actions .rabbit-primary-button {
+  min-height: 58px;
+  font-size: 18px;
+  box-shadow: 0 0 26px color-mix(in srgb, var(--button-background) 36%, transparent);
+}
+
+@keyframes rabbit-machine-dial {
+  to {
+    opacity: 0.56;
+    transform: scale(1.12) rotate(8deg);
+  }
+}
+
+@keyframes rabbit-machine-scan {
+  to {
+    transform: translateY(460%);
+  }
 }
 
 .rabbit-hole-card,
